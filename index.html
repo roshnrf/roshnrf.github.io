@@ -3,173 +3,755 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roshan A Rauof — AI/ML Engineer</title>
-  <meta name="description" content="Portfolio of Roshan A Rauof; Aspiring AI/ML Engineer building ML pipelines, speech processing systems, and scalable cloud applications.">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <title>Roshan A Rauof</title>
+  <meta name="description" content="Roshan A Rauof — Aspiring AI/ML Engineer. Building ML pipelines, speech processing systems, and scalable cloud applications.">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080810;
+      --bg2: #0e0e18;
+      --bg3: #141420;
+      --text: #e4e4ec;
+      --text2: #8888a0;
+      --text3: #4a4a60;
+      --accent: #4ecdc4;
+      --accent2: #45b7aa;
+      --accent-dim: rgba(78,205,196,0.08);
+      --accent-glow: rgba(78,205,196,0.2);
+      --red: #ff6b6b;
+      --border: #1a1a2e;
+      --mono: 'Space Mono', monospace;
+      --sans: 'Outfit', sans-serif;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Grain */
+    body::after {
+      content:''; position:fixed; inset:0; pointer-events:none; z-index:9999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    }
+
+    ::selection { background:var(--accent); color:var(--bg); }
+
+    a { color:var(--accent); text-decoration:none; transition:0.3s; }
+    a:hover { color:#7eddd6; }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem 0;
+    }
+
+    .hero-name-ascii {
+      font-family: var(--mono);
+      font-size: clamp(0.45rem, 1.2vw, 0.72rem);
+      line-height: 1.15;
+      color: var(--accent);
+      white-space: pre;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeIn 0.8s ease 0.2s forwards;
+      overflow: hidden;
+    }
+
+    /* Prompts */
+    .prompts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin: 2rem 0 3rem;
+      opacity: 0;
+      animation: fadeIn 0.6s ease 0.8s forwards;
+    }
+
+    .prompt {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--text2);
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg2);
+      transition: all 0.3s;
+      width: fit-content;
+    }
+
+    .prompt::before {
+      content: '↳';
+      color: var(--accent);
+    }
+
+    .prompt:hover {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+      color: var(--accent);
+      transform: translateX(6px);
+    }
+
+    /* Response area */
+    .response {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--text2);
+      line-height: 1.7;
+      padding: 1rem 1.2rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      display: none;
+      opacity: 0;
+      max-width: 650px;
+    }
+
+    .response.visible {
+      display: block;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .response .highlight {
+      color: var(--accent);
+    }
+
+    .response .metric {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    /* ===== CURRENTLY ===== */
+    .currently {
+      margin: 1rem 0 3rem;
+      opacity: 0;
+      animation: fadeIn 0.6s ease 1s forwards;
+    }
+
+    .currently-title {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text3);
+      margin-bottom: 1rem;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 0;
+      font-size: 0.92rem;
+      color: var(--text2);
+    }
+
+    .status-arrow {
+      font-family: var(--mono);
+      color: var(--accent);
+      font-size: 0.85rem;
+    }
+
+    .status-tag {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      background: var(--accent-dim);
+      border: 1px solid rgba(78,205,196,0.15);
+      border-radius: 4px;
+      color: var(--accent);
+    }
+
+    .status-item strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .status-seeking {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* ===== PROJECTS ===== */
+    .projects-section {
+      padding: 4rem 0;
+    }
+
+    .section-title {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--text3);
+      margin-bottom: 2rem;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px var(--accent);
+    }
+
+    .project-card:hover .project-preview {
+      transform: scale(1.03);
+    }
+
+    .project-preview {
+      width: 100%;
+      aspect-ratio: 16/10;
+      background: var(--bg3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: transform 0.4s;
+      position: relative;
+    }
+
+    .project-preview-inner {
+      font-family: var(--mono);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      opacity: 0.15;
+      letter-spacing: -1px;
+    }
+
+    /* Animated canvas preview for each project */
+    .preview-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .project-info {
+      padding: 1.2rem;
+    }
+
+    .project-name {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.3px;
+    }
+
+    .project-desc {
+      font-size: 0.8rem;
+      color: var(--text2);
+      line-height: 1.6;
+    }
+
+    .project-desc .proj-metric {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.8rem;
+    }
+
+    .project-tags span {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      padding: 0.15rem 0.45rem;
+      background: var(--accent-dim);
+      border-radius: 3px;
+      color: var(--accent);
+    }
+
+    /* ===== CONNECT ===== */
+    .connect {
+      padding: 5rem 0 3rem;
+      text-align: center;
+    }
+
+    .connect-links {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      flex-wrap: wrap;
+    }
+
+    .connect-links a {
+      color: var(--text2);
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: all 0.3s;
+    }
+
+    .connect-links a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    .connect-sep {
+      color: var(--text3);
+      user-select: none;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 2rem 0 3rem;
+      font-size: 0.72rem;
+      color: var(--text3);
+      font-family: var(--mono);
+    }
+
+    /* ===== NAV (floating) ===== */
+    .float-nav {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.3rem;
+      padding: 0.5rem;
+      background: rgba(14,14,24,0.9);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      z-index: 100;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+    }
+
+    .float-nav a {
+      color: var(--text3);
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .float-nav a:hover,
+    .float-nav a.active {
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeIn {
+      from { opacity:0; transform:translateY(12px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+
+    @keyframes typing {
+      from { width:0; }
+      to { width:100%; }
+    }
+
+    @keyframes blink {
+      50% { border-color:transparent; }
+    }
+
+    .fade-on-scroll {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 640px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .hero-name-ascii { font-size: 0.35rem; }
+      .float-nav { bottom: 1rem; font-size: 0.65rem; }
+      .float-nav a { padding: 0.35rem 0.6rem; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-logo">roshan<span>.dev</span></a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="assets/Roshan_A_Rauof_Resume.pdf" target="_blank">Resume</a></li>
-        <li><a href="playground.html">Playground</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <button class="nav-toggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
+  <!-- Floating nav -->
+  <nav class="float-nav">
+    <a href="#top" class="active">Home</a>
+    <a href="#projects">Projects</a>
+    <a href="playground.html">Playground</a>
+    <a href="blog.html">Blog</a>
+    <a href="assets/Roshan_A_Rauof_Resume.pdf" target="_blank">Resume</a>
   </nav>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-content">
-        <p class="hero-tag">// hello world</p>
-        <h1 class="hero-name">Roshan A Rauof</h1>
-        <p class="hero-title">Aspiring AI/ML Engineer</p>
-        <p class="hero-summary">
-          I build ML pipelines that detect insider threats before they strike, speech therapy platforms that help children speak better, and demand forecasting systems that cut waste by 40%. Currently finishing my B.Tech at VIT Chennai, graduating June 2026.
-        </p>
-        <div class="hero-actions">
-          <a href="projects.html" class="btn btn-primary">View Projects →</a>
-          <a href="assets/Roshan_A_Rauof_Resume.pdf" class="btn btn-outline" target="_blank">Download Resume</a>
-        </div>
-        <div class="hero-social">
-          <a href="https://github.com/roshnrf" target="_blank">GitHub</a>
-          <a href="https://linkedin.com/in/rosh003" target="_blank">LinkedIn</a>
-          <a href="mailto:roshanabdlrf03@gmail.com">Email</a>
-          <a href="https://medium.com/@rosh003" target="_blank">Medium</a>
-        </div>
-      </div>
-    </div>
-  </section>
+  <div class="container">
 
-  <!-- About -->
-  <section id="about">
-    <div class="container">
-      <div class="section-header fade-in">
-        <p class="section-label">01 — About</p>
-        <h2 class="section-title">A bit about me</h2>
-      </div>
-      <div class="about-grid">
-        <div class="about-text fade-in">
-          <p>
-            I'm a Computer Science student specializing in AI & Machine Learning at VIT Chennai. I got into ML through curiosity about how systems can learn patterns from messy, real-world data and stayed because of the engineering challenges in making those systems actually work at scale.
-          </p>
-          <p>
-            My work spans anomaly detection on million-record datasets, speech processing for children, and serverless cloud architectures. I care about building things that work, not just models that score well on benchmarks.
-          </p>
-          <p>
-            When I'm not coding, I'm exploring AI agents, explainable AI, and autonomous workflows figuring out how to make intelligent systems more transparent and useful.
-          </p>
-          <div class="tech-stack">
-            <h3>Tech I work with</h3>
-            <div class="tech-tags">
-              <span class="tech-tag">Python</span>
-              <span class="tech-tag">PyTorch</span>
-              <span class="tech-tag">Scikit-learn</span>
-              <span class="tech-tag">AWS</span>
-              <span class="tech-tag">Whisper</span>
-              <span class="tech-tag">Streamlit</span>
-              <span class="tech-tag">SQL</span>
-              <span class="tech-tag">DynamoDB</span>
-              <span class="tech-tag">PostgreSQL</span>
-              <span class="tech-tag">Git</span>
-              <span class="tech-tag">Azure</span>
-              <span class="tech-tag">Pandas</span>
-            </div>
-          </div>
-        </div>
-        <div class="about-stats fade-in">
-          <div class="stat-card">
-            <div class="stat-number">1.3M+</div>
-            <div class="stat-label">Records processed in PIRS pipeline</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">0.85</div>
-            <div class="stat-label">ROC-AUC on insider threat detection</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">88%</div>
-            <div class="stat-label">ASR accuracy on children's speech</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">40%</div>
-            <div class="stat-label">Waste reduction via demand forecasting</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- HERO -->
+    <section class="hero" id="top">
 
-  <!-- Contact -->
-  <section id="contact">
-    <div class="container">
-      <div class="section-header fade-in">
-        <p class="section-label">02 — Contact</p>
-        <h2 class="section-title">Let's connect</h2>
-        <p class="section-subtitle">Open to full-time opportunities starting June 2026. Happy to chat about ML, engineering, or anything interesting.</p>
-      </div>
-      <div class="contact-grid fade-in">
-        <div class="contact-info">
-          <div class="contact-links">
-            <div class="contact-link">
-              <span class="contact-link-label">Email</span>
-              <a href="mailto:roshanabdlrf03@gmail.com">roshanabdlrf03@gmail.com</a>
-            </div>
-            <div class="contact-link">
-              <span class="contact-link-label">Phone</span>
-              <a href="tel:+919962095961">+91 9962095961</a>
-            </div>
-            <div class="contact-link">
-              <span class="contact-link-label">LinkedIn</span>
-              <a href="https://linkedin.com/in/rosh003" target="_blank">linkedin.com/in/rosh003</a>
-            </div>
-            <div class="contact-link">
-              <span class="contact-link-label">GitHub</span>
-              <a href="https://github.com/roshnrf" target="_blank">github.com/roshnrf</a>
-            </div>
-            <div class="contact-link">
-              <span class="contact-link-label">Location</span>
-              <span>Chennai, India</span>
-            </div>
-          </div>
-        </div>
-        <form class="contact-form" action="https://formspree.io/f/mbdzkwrj" method="POST">
-          <div class="form-group">
-            <input type="text" name="name" placeholder="Your name" required>
-          </div>
-          <div class="form-group">
-            <input type="email" name="email" placeholder="Your email" required>
-          </div>
-          <div class="form-group">
-            <textarea name="message" placeholder="Your message..." required></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary">Send Message →</button>
-        </form>
-      </div>
-    </div>
-  </section>
+      <div class="hero-name-ascii" id="ascii-art">
+ ██████╗  ██████╗ ███████╗██╗  ██╗ █████╗ ███╗   ██╗
+ ██╔══██╗██╔═══██╗██╔════╝██║  ██║██╔══██╗████╗  ██║
+ ██████╔╝██║   ██║███████╗███████║███████║██╔██╗ ██║
+ ██╔══██╗██║   ██║╚════██║██╔══██║██╔══██║██║╚██╗██║
+ ██║  ██║╚██████╔╝███████║██║  ██║██║  ██║██║ ╚████║
+ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝</div>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-links">
-        <a href="https://github.com/roshnrf" target="_blank">GitHub</a>
+      <!-- Prompts -->
+      <div class="prompts">
+        <div class="prompt" onclick="showResponse('about')">Tell me about yourself</div>
+        <div class="prompt" onclick="showResponse('projects')">What have you built?</div>
+        <div class="prompt" onclick="showResponse('passion')">What drives you?</div>
+      </div>
+
+      <!-- Response area -->
+      <div class="response" id="resp-about">
+        I'm <span class="highlight">Roshan A Rauof</span> — a CS student at VIT Chennai specializing in AI & Machine Learning, graduating <span class="metric">June 2026</span>. I build end-to-end ML systems: from a <span class="metric">9-layer insider threat pipeline</span> processing <span class="metric">1.3M records</span>, to a speech therapy platform achieving <span class="metric">88% ASR accuracy</span> on children's speech. I like hard problems with messy data.
+      </div>
+      <div class="response" id="resp-projects">
+        <span class="highlight">PIRS</span> — detected insider threats <span class="metric">3–14 days before attack</span> with ROC-AUC <span class="metric">0.8554</span> on 1.3M user-day records using Isolation Forest + LSTM + Q-Learning.<br><br>
+        <span class="highlight">StoryWeaver</span> — speech therapy for kids ages 4–6 using Whisper + Gemini, hitting <span class="metric">88% accuracy</span> and <span class="metric">15% pronunciation improvement</span>.<br><br>
+        <span class="highlight">FreshStock AI</span> — demand forecasting for grocery stores, <span class="metric">87.3% accuracy</span>, <span class="metric">25–40% waste reduction</span>.<br><br>
+        Scroll down to see them all ↓
+      </div>
+      <div class="response" id="resp-passion">
+        I care about building systems that <span class="highlight">actually work</span> — not just models that score well on benchmarks. The gap between a Jupyter notebook and a deployed system is where the real engineering happens. I'm exploring <span class="highlight">AI agents</span>, <span class="highlight">explainable AI</span>, and <span class="highlight">autonomous workflows</span> — making intelligent systems more transparent and useful.
+      </div>
+
+      <!-- Currently -->
+      <div class="currently">
+        <div class="currently-title">Currently</div>
+
+        <div class="status-item">
+          <span class="status-arrow">►</span>
+          <span>B.Tech CSE (AI&ML) @</span>
+          <strong>VIT Chennai</strong>
+        </div>
+
+        <div class="status-item">
+          <span class="status-arrow">►</span>
+          <span>prev ML intern @</span>
+          <strong>Fynn Labs</strong>
+        </div>
+
+        <div class="status-item">
+          <span class="status-arrow">►</span>
+          <span>certified</span>
+          <span class="status-tag">Azure AI</span>
+          <span class="status-tag">Azure Data</span>
+        </div>
+
+        <div class="status-item">
+          <span class="status-arrow">►</span>
+          <span class="status-seeking">seeking full-time roles — ML/AI & SWE</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="projects-section" id="projects">
+      <div class="section-title">Projects</div>
+
+      <div class="projects-grid">
+
+        <a href="https://github.com/roshnrf/PIRS" target="_blank" class="project-card fade-on-scroll">
+          <div class="project-preview">
+            <canvas class="preview-canvas" id="canvas-pirs"></canvas>
+            <span class="project-preview-inner">PIRS</span>
+          </div>
+          <div class="project-info">
+            <div class="project-name">PIRS — Insider Threat Detection</div>
+            <div class="project-desc">
+              <span class="proj-metric">ROC-AUC 0.8554</span> on 1.3M records. 9-layer pipeline detecting threats <span class="proj-metric">3–14 days before attack</span> using ensemble anomaly detection + Q-learning interventions.
+            </div>
+            <div class="project-tags">
+              <span>PyTorch</span><span>Scikit-learn</span><span>Q-Learning</span><span>LSTM</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="https://github.com/roshnrf/StoryWeaver" target="_blank" class="project-card fade-on-scroll">
+          <div class="project-preview">
+            <canvas class="preview-canvas" id="canvas-story"></canvas>
+            <span class="project-preview-inner">SW</span>
+          </div>
+          <div class="project-info">
+            <div class="project-name">StoryWeaver — Speech Therapy AI</div>
+            <div class="project-desc">
+              <span class="proj-metric">88% ASR accuracy</span> on children's speech. Multi-error NLP pipeline + personalised story generation achieving <span class="proj-metric">15% pronunciation improvement</span>.
+            </div>
+            <div class="project-tags">
+              <span>Whisper</span><span>Gemini</span><span>Streamlit</span><span>NLP</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="https://github.com/roshnrf/License-Plate-Recognition-AWS" target="_blank" class="project-card fade-on-scroll">
+          <div class="project-preview">
+            <canvas class="preview-canvas" id="canvas-lpr"></canvas>
+            <span class="project-preview-inner">LPR</span>
+          </div>
+          <div class="project-info">
+            <div class="project-name">License Plate Recognition — AWS</div>
+            <div class="project-desc">
+              Event-driven <span class="proj-metric">serverless architecture</span>. S3 triggers → Lambda → Rekognition OCR → DynamoDB + REST API via API Gateway.
+            </div>
+            <div class="project-tags">
+              <span>AWS Lambda</span><span>S3</span><span>Rekognition</span><span>DynamoDB</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="https://github.com/roshnrf/FreshStock-AI---Smart-Inventory-Management-System" target="_blank" class="project-card fade-on-scroll">
+          <div class="project-preview">
+            <canvas class="preview-canvas" id="canvas-fresh"></canvas>
+            <span class="project-preview-inner">FS</span>
+          </div>
+          <div class="project-info">
+            <div class="project-name">FreshStock AI — Inventory Optimization</div>
+            <div class="project-desc">
+              <span class="proj-metric">87.3% forecast accuracy</span>, <span class="proj-metric">25–40% waste reduction</span>. Random Forest + time-series feature engineering for grocery stores.
+            </div>
+            <div class="project-tags">
+              <span>Scikit-learn</span><span>Pandas</span><span>Random Forest</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- CONNECT -->
+    <section class="connect" id="connect">
+      <div class="section-title" style="text-align:center;">Connect</div>
+      <div class="connect-links">
+        <a href="mailto:roshanabdlrf03@gmail.com">Email</a>
         <a href="https://linkedin.com/in/rosh003" target="_blank">LinkedIn</a>
+        <a href="https://github.com/roshnrf" target="_blank">GitHub</a>
         <a href="https://medium.com/@rosh003" target="_blank">Medium</a>
+        <a href="tel:+919962095961">Phone</a>
       </div>
-      <p>Built by Roshan A Rauof · 2026</p>
-    </div>
-  </footer>
+    </section>
 
-  <script src="assets/js/main.js"></script>
+    <footer class="footer">
+      Designed & Built by Roshan A Rauof
+    </footer>
+
+  </div>
+
+<script>
+// --- Prompt responses ---
+function showResponse(id) {
+  document.querySelectorAll('.response').forEach(r => {
+    r.classList.remove('visible');
+  });
+  setTimeout(() => {
+    const el = document.getElementById('resp-' + id);
+    el.classList.add('visible');
+  }, 100);
+}
+
+// --- Scroll fade-in ---
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.fade-on-scroll').forEach(el => obs.observe(el));
+
+// --- Animated canvas previews ---
+function animateCanvas(id, drawFn) {
+  const c = document.getElementById(id);
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  c.width = c.offsetWidth * 2;
+  c.height = c.offsetHeight * 2;
+  ctx.scale(2, 2);
+  const w = c.offsetWidth, h = c.offsetHeight;
+
+  let frame = 0;
+  function loop() {
+    drawFn(ctx, w, h, frame++);
+    requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+// PIRS — flowing anomaly detection wave
+animateCanvas('canvas-pirs', (ctx, w, h, f) => {
+  ctx.clearRect(0, 0, w, h);
+  ctx.strokeStyle = 'rgba(78,205,196,0.15)';
+  ctx.lineWidth = 1;
+
+  for (let line = 0; line < 5; line++) {
+    ctx.beginPath();
+    for (let x = 0; x < w; x += 2) {
+      const y = h/2 + Math.sin((x + f*2 + line*40) * 0.02) * (20 + line*8)
+        + Math.sin((x + f*3) * 0.05) * 10;
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
+  // Anomaly spike
+  const spikeX = (f * 1.5) % (w + 100) - 50;
+  ctx.strokeStyle = 'rgba(255,107,107,0.3)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(spikeX, h/2);
+  ctx.lineTo(spikeX + 5, h/2 - 40);
+  ctx.lineTo(spikeX + 10, h/2 + 30);
+  ctx.lineTo(spikeX + 15, h/2);
+  ctx.stroke();
+});
+
+// StoryWeaver — sound wave visualization
+animateCanvas('canvas-story', (ctx, w, h, f) => {
+  ctx.clearRect(0, 0, w, h);
+  const bars = 40;
+  const barW = w / bars;
+
+  for (let i = 0; i < bars; i++) {
+    const barH = Math.abs(Math.sin((i + f*0.05) * 0.4)) * h * 0.5
+      + Math.sin((i*2 + f*0.08)) * 15 + 10;
+    const x = i * barW;
+    const y = (h - barH) / 2;
+
+    ctx.fillStyle = `rgba(78,205,196,${0.08 + Math.abs(Math.sin(i*0.3))*0.12})`;
+    ctx.fillRect(x + 2, y, barW - 4, barH);
+  }
+});
+
+// LPR — moving grid / scan line
+animateCanvas('canvas-lpr', (ctx, w, h, f) => {
+  ctx.clearRect(0, 0, w, h);
+
+  // Grid
+  ctx.strokeStyle = 'rgba(78,205,196,0.06)';
+  ctx.lineWidth = 0.5;
+  const gs = 20;
+  for (let x = 0; x < w; x += gs) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+  }
+  for (let y = 0; y < h; y += gs) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+  }
+
+  // Scan line
+  const scanY = (f * 1.2) % h;
+  const grad = ctx.createLinearGradient(0, scanY - 20, 0, scanY + 20);
+  grad.addColorStop(0, 'transparent');
+  grad.addColorStop(0.5, 'rgba(78,205,196,0.15)');
+  grad.addColorStop(1, 'transparent');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, scanY - 20, w, 40);
+
+  // Bounding box
+  const bx = w*0.25, by = h*0.3, bw = w*0.5, bh = h*0.4;
+  ctx.strokeStyle = `rgba(78,205,196,${0.15 + Math.sin(f*0.05)*0.1})`;
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(bx, by, bw, bh);
+
+  // Corner brackets
+  const corner = 12;
+  ctx.strokeStyle = 'rgba(78,205,196,0.4)';
+  ctx.lineWidth = 2;
+  [[bx,by,1,1],[bx+bw,by,-1,1],[bx,by+bh,1,-1],[bx+bw,by+bh,-1,-1]].forEach(([x,y,dx,dy]) => {
+    ctx.beginPath();
+    ctx.moveTo(x + dx*corner, y); ctx.lineTo(x, y); ctx.lineTo(x, y + dy*corner);
+    ctx.stroke();
+  });
+});
+
+// FreshStock — bar chart animation
+animateCanvas('canvas-fresh', (ctx, w, h, f) => {
+  ctx.clearRect(0, 0, w, h);
+  const bars = 12;
+  const barW = w / bars;
+  const baseH = h * 0.15;
+
+  for (let i = 0; i < bars; i++) {
+    const target = 0.3 + Math.sin(i * 0.8 + 1) * 0.3 + Math.abs(Math.cos(i*1.2)) * 0.3;
+    const animated = target * Math.min(1, f * 0.02);
+    const barH = baseH + animated * h * 0.55;
+    const x = i * barW;
+    const y = h - barH;
+
+    ctx.fillStyle = `rgba(78,205,196,${0.06 + animated * 0.1})`;
+    ctx.fillRect(x + 4, y, barW - 8, barH);
+
+    // Glow on top
+    ctx.fillStyle = `rgba(78,205,196,${0.15 + Math.sin(f*0.03 + i)*0.1})`;
+    ctx.fillRect(x + 4, y, barW - 8, 2);
+  }
+
+  // Trend line
+  ctx.strokeStyle = 'rgba(78,205,196,0.2)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  for (let i = 0; i < bars; i++) {
+    const target = 0.3 + Math.sin(i * 0.8 + 1) * 0.3 + Math.abs(Math.cos(i*1.2)) * 0.3;
+    const animated = target * Math.min(1, f * 0.02);
+    const barH = baseH + animated * h * 0.55;
+    const x = i * barW + barW/2;
+    const y = h - barH;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+});
+
+// --- Active nav highlight on scroll ---
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.float-nav a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 200) current = s.id;
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+</script>
+
 </body>
 </html>
