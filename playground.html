@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ML Playground — Roshan A Rauof</title>
+  <meta name="description" content="Interactive machine learning playground. Click to create data, pick an algorithm, tune parameters, watch decision boundaries form in real-time.">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #12121a;
+      --bg3: #16161f;
+      --bg4: #1c1c28;
+      --text: #e8e8ed;
+      --text2: #8a8a9a;
+      --text3: #55556a;
+      --accent: #4ecdc4;
+      --accent-dim: rgba(78,205,196,0.12);
+      --accent-glow: rgba(78,205,196,0.3);
+      --classA: #4ecdc4;
+      --classB: #ff6b6b;
+      --classA-soft: rgba(78,205,196,0.35);
+      --classB-soft: rgba(255,107,107,0.35);
+      --border: #1e1e2e;
+      --font: 'Sora', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content:'';
+      position:fixed;
+      inset:0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events:none;
+      z-index:0;
+    }
+
+    /* Nav */
+    .nav {
+      position:fixed; top:0; width:100%; z-index:100;
+      padding:1.2rem 2rem;
+      background:rgba(10,10,15,0.85);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-inner {
+      max-width:1200px; margin:0 auto;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .nav-logo {
+      font-family:var(--mono); font-size:1.1rem; font-weight:500;
+      color:var(--accent); text-decoration:none;
+    }
+    .nav-logo span { color:var(--text3); }
+    .nav-links { display:flex; gap:2rem; list-style:none; }
+    .nav-links a {
+      color:var(--text2); font-size:0.85rem; text-decoration:none;
+      text-transform:uppercase; letter-spacing:0.5px;
+      transition:color 0.3s;
+    }
+    .nav-links a:hover { color:var(--accent); }
+
+    /* Main layout */
+    .playground {
+      max-width:1200px; margin:0 auto; padding:5.5rem 2rem 2rem;
+      position:relative; z-index:1;
+    }
+
+    .page-header {
+      margin-bottom:2rem;
+    }
+    .page-label {
+      font-family:var(--mono); font-size:0.8rem; color:var(--accent);
+      text-transform:uppercase; letter-spacing:2px; margin-bottom:0.4rem;
+    }
+    .page-title {
+      font-size:2rem; font-weight:700; letter-spacing:-1px; margin-bottom:0.4rem;
+    }
+    .page-subtitle {
+      color:var(--text2); font-size:0.92rem; max-width:600px;
+    }
+
+    /* Grid */
+    .main-grid {
+      display:grid;
+      grid-template-columns:280px 1fr 240px;
+      gap:1.2rem;
+      align-items:start;
+    }
+
+    /* Panels */
+    .panel {
+      background:var(--bg3);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:1.4rem;
+    }
+    .panel-title {
+      font-family:var(--mono);
+      font-size:0.72rem;
+      text-transform:uppercase;
+      letter-spacing:1.5px;
+      color:var(--text3);
+      margin-bottom:1rem;
+    }
+
+    /* Controls */
+    .control-group {
+      margin-bottom:1.2rem;
+    }
+    .control-label {
+      font-size:0.82rem;
+      color:var(--text2);
+      margin-bottom:0.4rem;
+      display:flex;
+      justify-content:space-between;
+    }
+    .control-value {
+      font-family:var(--mono);
+      color:var(--accent);
+      font-size:0.78rem;
+    }
+
+    /* Custom select */
+    select {
+      width:100%;
+      padding:0.55rem 0.8rem;
+      background:var(--bg);
+      border:1px solid var(--border);
+      border-radius:6px;
+      color:var(--text);
+      font-family:var(--font);
+      font-size:0.85rem;
+      cursor:pointer;
+      outline:none;
+      transition:border-color 0.3s;
+      appearance:none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%238a8a9a' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+    select:focus { border-color:var(--accent); }
+
+    /* Range slider */
+    input[type="range"] {
+      width:100%;
+      height:4px;
+      background:var(--border);
+      border-radius:2px;
+      outline:none;
+      -webkit-appearance:none;
+      cursor:pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance:none;
+      width:16px; height:16px;
+      border-radius:50%;
+      background:var(--accent);
+      cursor:pointer;
+      box-shadow:0 0 8px var(--accent-glow);
+      transition:transform 0.2s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform:scale(1.2);
+    }
+
+    /* Buttons */
+    .btn-row {
+      display:flex;
+      gap:0.5rem;
+      flex-wrap:wrap;
+    }
+    .btn {
+      padding:0.5rem 1rem;
+      border:1px solid var(--border);
+      border-radius:6px;
+      background:var(--bg);
+      color:var(--text2);
+      font-family:var(--font);
+      font-size:0.8rem;
+      cursor:pointer;
+      transition:all 0.3s;
+    }
+    .btn:hover {
+      border-color:var(--accent);
+      color:var(--accent);
+      background:var(--accent-dim);
+    }
+    .btn.active {
+      border-color:var(--accent);
+      color:var(--bg);
+      background:var(--accent);
+    }
+    .btn-danger {
+      border-color:#ff6b6b33;
+      color:#ff6b6b;
+    }
+    .btn-danger:hover {
+      border-color:#ff6b6b;
+      background:rgba(255,107,107,0.12);
+    }
+    .btn-primary {
+      background:var(--accent);
+      color:var(--bg);
+      border-color:var(--accent);
+      font-weight:600;
+    }
+    .btn-primary:hover {
+      background:#7eddd6;
+      box-shadow:0 4px 16px var(--accent-glow);
+      transform:translateY(-1px);
+    }
+
+    /* Dataset buttons */
+    .dataset-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:0.4rem;
+    }
+    .dataset-btn {
+      padding:0.45rem 0.6rem;
+      border:1px solid var(--border);
+      border-radius:6px;
+      background:var(--bg);
+      color:var(--text2);
+      font-family:var(--mono);
+      font-size:0.7rem;
+      cursor:pointer;
+      transition:all 0.3s;
+      text-align:center;
+    }
+    .dataset-btn:hover {
+      border-color:var(--accent);
+      color:var(--accent);
+    }
+    .dataset-btn.active {
+      border-color:var(--accent);
+      background:var(--accent-dim);
+      color:var(--accent);
+    }
+
+    /* Canvas area */
+    .canvas-wrap {
+      position:relative;
+      border-radius:10px;
+      overflow:hidden;
+      border:1px solid var(--border);
+      background:var(--bg2);
+    }
+    .canvas-wrap canvas {
+      display:block;
+      width:100%;
+      cursor:crosshair;
+    }
+    .canvas-hint {
+      position:absolute;
+      bottom:12px; left:50%;
+      transform:translateX(-50%);
+      font-family:var(--mono);
+      font-size:0.7rem;
+      color:var(--text3);
+      background:rgba(10,10,15,0.8);
+      padding:0.3rem 0.8rem;
+      border-radius:20px;
+      pointer-events:none;
+      transition:opacity 0.3s;
+    }
+    .canvas-legend {
+      position:absolute;
+      top:12px; right:12px;
+      display:flex; gap:0.8rem;
+      font-family:var(--mono);
+      font-size:0.7rem;
+    }
+    .legend-item {
+      display:flex; align-items:center; gap:0.3rem;
+      color:var(--text2);
+    }
+    .legend-dot {
+      width:10px; height:10px; border-radius:50%;
+    }
+
+    /* Metrics panel */
+    .metric-card {
+      background:var(--bg);
+      border:1px solid var(--border);
+      border-radius:8px;
+      padding:0.9rem;
+      margin-bottom:0.6rem;
+      transition:border-color 0.3s;
+    }
+    .metric-card:hover {
+      border-color:rgba(78,205,196,0.3);
+    }
+    .metric-number {
+      font-family:var(--mono);
+      font-size:1.5rem;
+      font-weight:700;
+      color:var(--accent);
+      line-height:1;
+    }
+    .metric-label {
+      font-size:0.72rem;
+      color:var(--text3);
+      margin-top:0.25rem;
+      text-transform:uppercase;
+      letter-spacing:0.5px;
+    }
+
+    .data-counts {
+      display:flex; gap:0.8rem; margin-top:0.6rem;
+    }
+    .data-count {
+      font-family:var(--mono);
+      font-size:0.75rem;
+    }
+    .count-a { color:var(--classA); }
+    .count-b { color:var(--classB); }
+
+    /* Confusion matrix */
+    .confusion-matrix {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:4px;
+      margin-top:0.6rem;
+    }
+    .cm-cell {
+      background:var(--bg);
+      border:1px solid var(--border);
+      border-radius:4px;
+      padding:0.4rem;
+      text-align:center;
+      font-family:var(--mono);
+      font-size:0.75rem;
+    }
+    .cm-label {
+      font-size:0.6rem;
+      color:var(--text3);
+      display:block;
+    }
+    .cm-val {
+      font-size:1rem;
+      font-weight:600;
+    }
+    .cm-tp { color:#4ecdc4; }
+    .cm-tn { color:#4ecdc4; }
+    .cm-fp { color:#ff6b6b; }
+    .cm-fn { color:#ff6b6b; }
+
+    /* Train animation */
+    .training-pulse {
+      animation: pulse 0.6s ease infinite;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow:0 0 0 0 var(--accent-glow); }
+      50% { box-shadow:0 0 0 8px transparent; }
+    }
+
+    /* Speed indicator */
+    .speed-bar {
+      height:3px;
+      background:var(--border);
+      border-radius:2px;
+      margin-top:0.5rem;
+      overflow:hidden;
+    }
+    .speed-fill {
+      height:100%;
+      background:var(--accent);
+      border-radius:2px;
+      transition:width 0.5s ease;
+    }
+
+    /* Separator */
+    .sep {
+      height:1px;
+      background:var(--border);
+      margin:1rem 0;
+    }
+
+    /* Responsive */
+    @media(max-width:960px) {
+      .main-grid {
+        grid-template-columns:1fr;
+      }
+      .nav-links { display:none; }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity:0; transform:translateY(10px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+    .fade { animation: fadeIn 0.5s ease forwards; }
+    .fade-d1 { animation-delay:0.1s; opacity:0; }
+    .fade-d2 { animation-delay:0.2s; opacity:0; }
+    .fade-d3 { animation-delay:0.3s; opacity:0; }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">roshan<span>.dev</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="playground.html" style="color:var(--accent);">Playground</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="playground">
+    <!-- Header -->
+    <div class="page-header fade">
+      <p class="page-label">// interactive experiment</p>
+      <h1 class="page-title">ML Playground</h1>
+      <p class="page-subtitle">Click to place data points. Pick an algorithm. Watch the decision boundary form in real-time.</p>
+    </div>
+
+    <!-- Main grid -->
+    <div class="main-grid">
+
+      <!-- LEFT: Controls -->
+      <div class="panel fade fade-d1">
+        <p class="panel-title">Algorithm</p>
+
+        <div class="control-group">
+          <select id="algo">
+            <option value="knn">K-Nearest Neighbors</option>
+            <option value="perceptron">Perceptron</option>
+            <option value="nb">Naive Bayes</option>
+          </select>
+        </div>
+
+        <!-- KNN params -->
+        <div id="params-knn">
+          <div class="control-group">
+            <div class="control-label">
+              <span>K (neighbors)</span>
+              <span class="control-value" id="knn-k-val">5</span>
+            </div>
+            <input type="range" id="knn-k" min="1" max="25" value="5" step="2">
+          </div>
+          <div class="control-group">
+            <div class="control-label">
+              <span>Distance metric</span>
+            </div>
+            <select id="knn-metric">
+              <option value="euclidean">Euclidean</option>
+              <option value="manhattan">Manhattan</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Perceptron params -->
+        <div id="params-perceptron" style="display:none;">
+          <div class="control-group">
+            <div class="control-label">
+              <span>Learning rate</span>
+              <span class="control-value" id="lr-val">0.10</span>
+            </div>
+            <input type="range" id="perc-lr" min="0.01" max="0.5" value="0.1" step="0.01">
+          </div>
+          <div class="control-group">
+            <div class="control-label">
+              <span>Epochs</span>
+              <span class="control-value" id="epoch-val">100</span>
+            </div>
+            <input type="range" id="perc-epochs" min="10" max="500" value="100" step="10">
+          </div>
+        </div>
+
+        <!-- NB params -->
+        <div id="params-nb" style="display:none;">
+          <div class="control-group">
+            <div class="control-label">
+              <span>Smoothing</span>
+              <span class="control-value" id="nb-smooth-val">1.00</span>
+            </div>
+            <input type="range" id="nb-smooth" min="0.01" max="5" value="1" step="0.01">
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <p class="panel-title">Data</p>
+
+        <div class="control-group">
+          <div class="control-label"><span>Current class</span></div>
+          <div class="btn-row">
+            <button class="btn active" id="classA-btn" onclick="setClass(0)" style="border-color:var(--classA);color:var(--classA);">● Class A</button>
+            <button class="btn" id="classB-btn" onclick="setClass(1)" style="border-color:var(--classB);color:var(--classB);">● Class B</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label"><span>Preset datasets</span></div>
+          <div class="dataset-grid">
+            <button class="dataset-btn" onclick="loadDataset('blobs')">Blobs</button>
+            <button class="dataset-btn" onclick="loadDataset('circles')">Circles</button>
+            <button class="dataset-btn" onclick="loadDataset('moons')">Moons</button>
+            <button class="dataset-btn" onclick="loadDataset('xor')">XOR</button>
+            <button class="dataset-btn" onclick="loadDataset('spiral')">Spiral</button>
+            <button class="dataset-btn" onclick="loadDataset('linear')">Linear</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span>Resolution</span>
+            <span class="control-value" id="res-val">4</span>
+          </div>
+          <input type="range" id="resolution" min="2" max="8" value="4" step="1">
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="classify()" id="train-btn">Train →</button>
+          <button class="btn btn-danger" onclick="clearAll()">Clear all</button>
+        </div>
+      </div>
+
+      <!-- CENTER: Canvas -->
+      <div class="canvas-wrap fade fade-d2">
+        <canvas id="canvas" width="640" height="520"></canvas>
+        <div class="canvas-hint" id="hint">Left-click to place points</div>
+        <div class="canvas-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--classA);"></div>Class A</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--classB);"></div>Class B</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Metrics -->
+      <div class="panel fade fade-d3">
+        <p class="panel-title">Metrics</p>
+
+        <div class="metric-card">
+          <div class="metric-number" id="m-accuracy">—</div>
+          <div class="metric-label">Accuracy</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-number" id="m-precision">—</div>
+          <div class="metric-label">Precision</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-number" id="m-recall">—</div>
+          <div class="metric-label">Recall</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-number" id="m-f1">—</div>
+          <div class="metric-label">F1 Score</div>
+        </div>
+
+        <div class="sep"></div>
+
+        <p class="panel-title">Confusion Matrix</p>
+        <div class="confusion-matrix">
+          <div class="cm-cell"><span class="cm-label">TP</span><span class="cm-val cm-tp" id="cm-tp">0</span></div>
+          <div class="cm-cell"><span class="cm-label">FP</span><span class="cm-val cm-fp" id="cm-fp">0</span></div>
+          <div class="cm-cell"><span class="cm-label">FN</span><span class="cm-val cm-fn" id="cm-fn">0</span></div>
+          <div class="cm-cell"><span class="cm-label">TN</span><span class="cm-val cm-tn" id="cm-tn">0</span></div>
+        </div>
+
+        <div class="sep"></div>
+
+        <p class="panel-title">Data</p>
+        <div class="data-counts">
+          <span class="data-count count-a">● A: <span id="count-a">0</span></span>
+          <span class="data-count count-b">● B: <span id="count-b">0</span></span>
+        </div>
+
+        <div class="speed-bar" style="margin-top:1rem;">
+          <div class="speed-fill" id="speed-fill" style="width:0%;"></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:0.65rem;color:var(--text3);margin-top:0.3rem;">
+          <span id="time-label">Train time: —</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+// ==========================================
+//  ML PLAYGROUND — All algorithms in JS
+// ==========================================
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const W = canvas.width, H = canvas.height;
+
+let points = [];
+let currentClass = 0;
+let boundaryData = null;
+
+// --- UI wiring ---
+const algoSelect = document.getElementById('algo');
+algoSelect.addEventListener('change', () => {
+  document.getElementById('params-knn').style.display = algoSelect.value==='knn'?'block':'none';
+  document.getElementById('params-perceptron').style.display = algoSelect.value==='perceptron'?'block':'none';
+  document.getElementById('params-nb').style.display = algoSelect.value==='nb'?'block':'none';
+  if(points.length>2) classify();
+});
+
+document.getElementById('knn-k').addEventListener('input', e => {
+  document.getElementById('knn-k-val').textContent = e.target.value;
+  if(points.length>2) classify();
+});
+document.getElementById('knn-metric').addEventListener('change', () => { if(points.length>2) classify(); });
+document.getElementById('perc-lr').addEventListener('input', e => {
+  document.getElementById('lr-val').textContent = parseFloat(e.target.value).toFixed(2);
+});
+document.getElementById('perc-epochs').addEventListener('input', e => {
+  document.getElementById('epoch-val').textContent = e.target.value;
+});
+document.getElementById('nb-smooth').addEventListener('input', e => {
+  document.getElementById('nb-smooth-val').textContent = parseFloat(e.target.value).toFixed(2);
+});
+document.getElementById('resolution').addEventListener('input', e => {
+  document.getElementById('res-val').textContent = e.target.value;
+  if(points.length>2) classify();
+});
+
+// --- Canvas click ---
+canvas.addEventListener('click', e => {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = W / rect.width;
+  const scaleY = H / rect.height;
+  const x = (e.clientX - rect.left) * scaleX;
+  const y = (e.clientY - rect.top) * scaleY;
+  points.push({ x, y, c: currentClass });
+  updateCounts();
+  draw();
+  document.getElementById('hint').style.opacity = '0';
+});
+
+canvas.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  setClass(currentClass === 0 ? 1 : 0);
+});
+
+function setClass(c) {
+  currentClass = c;
+  document.getElementById('classA-btn').classList.toggle('active', c===0);
+  document.getElementById('classB-btn').classList.toggle('active', c===1);
+}
+
+function updateCounts() {
+  document.getElementById('count-a').textContent = points.filter(p=>p.c===0).length;
+  document.getElementById('count-b').textContent = points.filter(p=>p.c===1).length;
+}
+
+function clearAll() {
+  points = [];
+  boundaryData = null;
+  updateCounts();
+  clearMetrics();
+  draw();
+  document.getElementById('hint').style.opacity = '1';
+}
+
+function clearMetrics() {
+  ['m-accuracy','m-precision','m-recall','m-f1'].forEach(id => document.getElementById(id).textContent = '—');
+  ['cm-tp','cm-fp','cm-fn','cm-tn'].forEach(id => document.getElementById(id).textContent = '0');
+  document.getElementById('speed-fill').style.width = '0%';
+  document.getElementById('time-label').textContent = 'Train time: —';
+}
+
+// --- Drawing ---
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Draw grid
+  ctx.strokeStyle = 'rgba(30,30,46,0.5)';
+  ctx.lineWidth = 0.5;
+  for(let i = 0; i < W; i += 40) {
+    ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,H); ctx.stroke();
+  }
+  for(let i = 0; i < H; i += 40) {
+    ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(W,i); ctx.stroke();
+  }
+
+  // Draw boundary
+  if(boundaryData) {
+    const res = parseInt(document.getElementById('resolution').value);
+    const imgData = ctx.createImageData(W, H);
+    for(let py = 0; py < H; py += res) {
+      for(let px = 0; px < W; px += res) {
+        const idx = Math.floor(py/res) * Math.ceil(W/res) + Math.floor(px/res);
+        const val = boundaryData[idx];
+        const r = val === 0 ? 78 : 255;
+        const g = val === 0 ? 205 : 107;
+        const b = val === 0 ? 196 : 107;
+        for(let dy = 0; dy < res && py+dy < H; dy++) {
+          for(let dx = 0; dx < res && px+dx < W; dx++) {
+            const i = ((py+dy)*W + (px+dx)) * 4;
+            imgData.data[i] = r;
+            imgData.data[i+1] = g;
+            imgData.data[i+2] = b;
+            imgData.data[i+3] = 40;
+          }
+        }
+      }
+    }
+    ctx.putImageData(imgData, 0, 0);
+
+    // Redraw grid on top
+    ctx.strokeStyle = 'rgba(30,30,46,0.3)';
+    ctx.lineWidth = 0.5;
+    for(let i = 0; i < W; i += 40) {
+      ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,H); ctx.stroke();
+    }
+    for(let i = 0; i < H; i += 40) {
+      ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(W,i); ctx.stroke();
+    }
+  }
+
+  // Draw points
+  points.forEach(p => {
+    // Glow
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 12, 0, Math.PI*2);
+    ctx.fillStyle = p.c === 0 ? 'rgba(78,205,196,0.15)' : 'rgba(255,107,107,0.15)';
+    ctx.fill();
+
+    // Point
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 5, 0, Math.PI*2);
+    ctx.fillStyle = p.c === 0 ? '#4ecdc4' : '#ff6b6b';
+    ctx.fill();
+    ctx.strokeStyle = p.c === 0 ? '#7eddd6' : '#ff9999';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  });
+}
+
+// ==========================================
+//  ALGORITHMS
+// ==========================================
+
+// --- KNN ---
+function knnPredict(px, py, k, metric) {
+  const dists = points.map(p => {
+    const d = metric === 'manhattan'
+      ? Math.abs(p.x - px) + Math.abs(p.y - py)
+      : Math.sqrt((p.x-px)**2 + (p.y-py)**2);
+    return { d, c: p.c };
+  });
+  dists.sort((a,b) => a.d - b.d);
+  const topK = dists.slice(0, k);
+  const votes = [0, 0];
+  topK.forEach(t => votes[t.c]++);
+  return votes[0] >= votes[1] ? 0 : 1;
+}
+
+// --- Perceptron ---
+function trainPerceptron() {
+  const lr = parseFloat(document.getElementById('perc-lr').value);
+  const epochs = parseInt(document.getElementById('perc-epochs').value);
+
+  // Normalize
+  const minX = Math.min(...points.map(p=>p.x));
+  const maxX = Math.max(...points.map(p=>p.x));
+  const minY = Math.min(...points.map(p=>p.y));
+  const maxY = Math.max(...points.map(p=>p.y));
+  const rangeX = maxX - minX || 1;
+  const rangeY = maxY - minY || 1;
+
+  let w = [Math.random()*0.4-0.2, Math.random()*0.4-0.2, Math.random()*0.4-0.2]; // w0=bias
+
+  for(let e = 0; e < epochs; e++) {
+    for(const p of points) {
+      const nx = (p.x - minX) / rangeX;
+      const ny = (p.y - minY) / rangeY;
+      const z = w[0] + w[1]*nx + w[2]*ny;
+      const pred = z > 0 ? 1 : 0;
+      const err = p.c - pred;
+      w[0] += lr * err;
+      w[1] += lr * err * nx;
+      w[2] += lr * err * ny;
+    }
+  }
+
+  return { w, minX, maxX, minY, maxY, rangeX, rangeY };
+}
+
+function perceptronPredict(px, py, model) {
+  const nx = (px - model.minX) / model.rangeX;
+  const ny = (py - model.minY) / model.rangeY;
+  const z = model.w[0] + model.w[1]*nx + model.w[2]*ny;
+  return z > 0 ? 1 : 0;
+}
+
+// --- Naive Bayes ---
+function trainNaiveBayes() {
+  const smooth = parseFloat(document.getElementById('nb-smooth').value);
+  const classes = [0, 1];
+  const stats = {};
+
+  classes.forEach(c => {
+    const pts = points.filter(p => p.c === c);
+    if(pts.length === 0) { stats[c] = null; return; }
+    const xs = pts.map(p => p.x);
+    const ys = pts.map(p => p.y);
+    const meanX = xs.reduce((a,b)=>a+b,0)/xs.length;
+    const meanY = ys.reduce((a,b)=>a+b,0)/ys.length;
+    const varX = xs.reduce((a,b)=>a+(b-meanX)**2,0)/xs.length + smooth;
+    const varY = ys.reduce((a,b)=>a+(b-meanY)**2,0)/ys.length + smooth;
+    stats[c] = { meanX, meanY, varX, varY, prior: pts.length / points.length };
+  });
+
+  return stats;
+}
+
+function nbPredict(px, py, stats) {
+  let bestClass = 0, bestScore = -Infinity;
+  [0,1].forEach(c => {
+    if(!stats[c]) return;
+    const s = stats[c];
+    const logPrior = Math.log(s.prior);
+    const logLikX = -0.5*Math.log(2*Math.PI*s.varX) - ((px-s.meanX)**2)/(2*s.varX);
+    const logLikY = -0.5*Math.log(2*Math.PI*s.varY) - ((py-s.meanY)**2)/(2*s.varY);
+    const score = logPrior + logLikX + logLikY;
+    if(score > bestScore) { bestScore = score; bestClass = c; }
+  });
+  return bestClass;
+}
+
+// ==========================================
+//  CLASSIFY
+// ==========================================
+function classify() {
+  if(points.length < 2) return;
+  const hasA = points.some(p=>p.c===0);
+  const hasB = points.some(p=>p.c===1);
+  if(!hasA || !hasB) return;
+
+  const t0 = performance.now();
+  const algo = algoSelect.value;
+  const res = parseInt(document.getElementById('resolution').value);
+  const cols = Math.ceil(W/res);
+  const rows = Math.ceil(H/res);
+
+  let model = null;
+  if(algo === 'perceptron') model = trainPerceptron();
+  if(algo === 'nb') model = trainNaiveBayes();
+
+  const boundary = new Array(cols * rows);
+
+  const k = parseInt(document.getElementById('knn-k').value);
+  const metric = document.getElementById('knn-metric').value;
+
+  for(let py = 0; py < H; py += res) {
+    for(let px = 0; px < W; px += res) {
+      const idx = Math.floor(py/res) * cols + Math.floor(px/res);
+      const cx = px + res/2;
+      const cy = py + res/2;
+
+      if(algo === 'knn') boundary[idx] = knnPredict(cx, cy, k, metric);
+      else if(algo === 'perceptron') boundary[idx] = perceptronPredict(cx, cy, model);
+      else if(algo === 'nb') boundary[idx] = nbPredict(cx, cy, model);
+    }
+  }
+
+  boundaryData = boundary;
+
+  const elapsed = performance.now() - t0;
+
+  // Compute metrics (leave-one-out for small datasets, or just on training data)
+  let tp=0,fp=0,fn=0,tn=0;
+  points.forEach(p => {
+    let pred;
+    if(algo === 'knn') pred = knnPredict(p.x, p.y, k, metric);
+    else if(algo === 'perceptron') pred = perceptronPredict(p.x, p.y, model);
+    else pred = nbPredict(p.x, p.y, model);
+
+    if(p.c===1 && pred===1) tp++;
+    if(p.c===0 && pred===1) fp++;
+    if(p.c===1 && pred===0) fn++;
+    if(p.c===0 && pred===0) tn++;
+  });
+
+  const accuracy = (tp+tn)/(tp+tn+fp+fn);
+  const precision = tp+fp>0 ? tp/(tp+fp) : 0;
+  const recall = tp+fn>0 ? tp/(tp+fn) : 0;
+  const f1 = precision+recall>0 ? 2*precision*recall/(precision+recall) : 0;
+
+  document.getElementById('m-accuracy').textContent = (accuracy*100).toFixed(1) + '%';
+  document.getElementById('m-precision').textContent = (precision*100).toFixed(1) + '%';
+  document.getElementById('m-recall').textContent = (recall*100).toFixed(1) + '%';
+  document.getElementById('m-f1').textContent = f1.toFixed(3);
+  document.getElementById('cm-tp').textContent = tp;
+  document.getElementById('cm-fp').textContent = fp;
+  document.getElementById('cm-fn').textContent = fn;
+  document.getElementById('cm-tn').textContent = tn;
+
+  // Speed bar (cap at 500ms)
+  const pct = Math.min(100, (elapsed/500)*100);
+  document.getElementById('speed-fill').style.width = pct + '%';
+  document.getElementById('time-label').textContent = `Train time: ${elapsed.toFixed(1)}ms`;
+
+  draw();
+}
+
+// ==========================================
+//  PRESET DATASETS
+// ==========================================
+function loadDataset(type) {
+  points = [];
+  boundaryData = null;
+  clearMetrics();
+
+  // Highlight active button
+  document.querySelectorAll('.dataset-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+
+  const cx = W/2, cy = H/2;
+  const n = 80;
+
+  switch(type) {
+    case 'blobs': {
+      for(let i=0;i<n;i++){
+        points.push({ x: 180+Math.random()*120, y: 160+Math.random()*120, c:0 });
+        points.push({ x: 360+Math.random()*120, y: 280+Math.random()*120, c:1 });
+      }
+      break;
+    }
+    case 'circles': {
+      for(let i=0;i<n;i++){
+        const a1 = Math.random()*Math.PI*2;
+        const r1 = 60+Math.random()*30;
+        points.push({ x: cx+Math.cos(a1)*r1, y: cy+Math.sin(a1)*r1, c:0 });
+        const a2 = Math.random()*Math.PI*2;
+        const r2 = 140+Math.random()*40;
+        points.push({ x: cx+Math.cos(a2)*r2, y: cy+Math.sin(a2)*r2, c:1 });
+      }
+      break;
+    }
+    case 'moons': {
+      for(let i=0;i<n;i++){
+        const a1 = Math.PI*i/n;
+        points.push({ x: cx+Math.cos(a1)*130+(Math.random()-0.5)*30, y: cy-Math.sin(a1)*130+(Math.random()-0.5)*30, c:0 });
+        points.push({ x: cx+130-Math.cos(a1)*130+(Math.random()-0.5)*30, y: cy+Math.sin(a1)*130-40+(Math.random()-0.5)*30, c:1 });
+      }
+      break;
+    }
+    case 'xor': {
+      for(let i=0;i<n;i++){
+        points.push({ x: 120+Math.random()*160, y: 100+Math.random()*140, c:0 });
+        points.push({ x: 380+Math.random()*160, y: 300+Math.random()*140, c:0 });
+        points.push({ x: 380+Math.random()*160, y: 100+Math.random()*140, c:1 });
+        points.push({ x: 120+Math.random()*160, y: 300+Math.random()*140, c:1 });
+      }
+      break;
+    }
+    case 'spiral': {
+      for(let i=0;i<n*2;i++){
+        const t = i/n*3;
+        const r = 20+t*35;
+        points.push({ x: cx+Math.cos(t)*r+(Math.random()-0.5)*20, y: cy+Math.sin(t)*r+(Math.random()-0.5)*20, c:0 });
+        points.push({ x: cx-Math.cos(t)*r+(Math.random()-0.5)*20, y: cy-Math.sin(t)*r+(Math.random()-0.5)*20, c:1 });
+      }
+      break;
+    }
+    case 'linear': {
+      for(let i=0;i<n;i++){
+        const x = Math.random()*W;
+        const y = Math.random()*H;
+        points.push({ x, y, c: y < (H - x*H/W + (Math.random()-0.5)*80) ? 0 : 1 });
+      }
+      break;
+    }
+  }
+
+  updateCounts();
+  draw();
+  setTimeout(classify, 100);
+}
+
+// Init
+draw();
+</script>
+
+</body>
+</html>
