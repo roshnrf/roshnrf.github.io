@@ -4,187 +4,136 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Projects — Roshan A Rauof</title>
-  <meta name="description" content="ML/AI and software engineering projects by Roshan A Rauof.">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#181822;--bg2:#1f1f2c;--bg3:#262636;--bg4:#2d2d40;--text:#d0d0dc;--text2:#8888a0;--text3:#555568;--accent:#b8b8cc;--accent-bright:#e0e0f0;--green:#7ec699;--blue:#7aa2f7;--purple:#9d7cd8;--orange:#e0a370;--red:#f7768e;--border:#2a2a3c;--border-light:#363648;--mono:'IBM Plex Mono',monospace;--sans:'Outfit',sans-serif}
+    *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+    ::selection{background:var(--purple);color:#fff}
+    a{color:var(--blue);text-decoration:none;transition:0.3s}a:hover{color:var(--accent-bright)}
+    .container{max-width:820px;margin:0 auto;padding:0 2rem}
+    .float-nav{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);display:flex;gap:0.2rem;padding:0.45rem;background:rgba(24,24,34,0.92);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:12px;z-index:100;font-family:var(--mono);font-size:0.7rem}
+    .float-nav a{color:var(--text3);padding:0.4rem 0.85rem;border-radius:8px;transition:0.3s;text-decoration:none}.float-nav a:hover,.float-nav a.active{color:var(--accent-bright);background:var(--bg3)}
+    .section-line{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}.section-label{font-family:var(--mono);font-size:0.72rem;text-transform:uppercase;letter-spacing:3px;color:var(--text3);white-space:nowrap}.section-line::after{content:'';flex:1;height:1px;background:var(--border)}
+    .page-header{padding-top:6rem;margin-bottom:0.5rem}
+    .page-desc{color:var(--text2);font-size:0.92rem;margin-bottom:2rem;max-width:550px}
+    .project-detail{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:2rem;margin-bottom:1.5rem;transition:0.3s}
+    .project-detail:hover{border-color:var(--border-light)}
+    .pd-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.5rem;flex-wrap:wrap;gap:0.5rem}
+    .pd-name{font-size:1.15rem;font-weight:600}.pd-year{font-family:var(--mono);font-size:0.75rem;color:var(--text3)}
+    .pd-desc{color:var(--text2);font-size:0.88rem;line-height:1.7;margin-bottom:1rem}
+    .pd-desc .pm{color:var(--orange);font-weight:500}
+    .pd-metrics{display:flex;flex-wrap:wrap;gap:0.6rem;margin-bottom:1rem}
+    .pd-metric{font-family:var(--mono);font-size:0.75rem;padding:0.3rem 0.7rem;background:var(--bg);border:1px solid var(--border);border-radius:5px}
+    .pd-metric .val{color:var(--green);font-weight:600}
+    .pd-tags{display:flex;flex-wrap:wrap;gap:0.3rem;margin-bottom:1rem}
+    .pd-tags span{font-family:var(--mono);font-size:0.65rem;padding:0.15rem 0.5rem;background:var(--bg);border:1px solid var(--border);border-radius:3px;color:var(--text3)}
+    .pd-link{font-family:var(--mono);font-size:0.82rem;color:var(--blue)}
+    .bullets{list-style:none;padding:0;margin-bottom:1rem}
+    .bullets li{color:var(--text2);font-size:0.85rem;padding:0.3rem 0 0.3rem 1.2rem;position:relative;line-height:1.6}
+    .bullets li::before{content:'→';position:absolute;left:0;color:var(--green)}
+    .footer{text-align:center;padding:2rem 0 4rem;font-size:0.72rem;color:var(--text3);font-family:var(--mono)}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    .fade{animation:fadeIn 0.5s ease forwards}.fade-d1{animation-delay:0.1s;opacity:0}.fade-d2{animation-delay:0.2s;opacity:0}.fade-d3{animation-delay:0.3s;opacity:0}.fade-d4{animation-delay:0.4s;opacity:0}
+  </style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-logo">roshan<span>.dev</span></a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="assets/Roshan_A_Rauof_Resume.pdf" target="_blank">Resume</a></li>
-        <li><a href="playground.html">Playground</a></li>
-        <li><a href="index.html#contact">Contact</a></li>
-      </ul>
-      <button class="nav-toggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
+<nav class="float-nav">
+  <a href="index.html">Home</a>
+  <a href="projects.html" class="active">Projects</a>
+  <a href="playground.html">Playground</a>
+  <a href="blog.html">Blog</a>
+  <a href="assets/Roshan_A_Rauof_Resume.pdf" target="_blank">Resume</a>
+</nav>
 
-  <!-- Page Header -->
-  <div class="page-header">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-label">// what I've built</p>
-        <h2 class="section-title">Projects</h2>
-        <p class="section-subtitle">End-to-end ML systems, serverless apps, and AI-powered platforms — each with measurable results.</p>
-      </div>
+<div class="container">
+  <div class="page-header fade">
+    <div class="section-line"><span class="section-label">Projects</span></div>
+  </div>
+  <p class="page-desc fade fade-d1">End-to-end ML systems, serverless apps, and AI-powered platforms — each with measurable results.</p>
+
+  <!-- PIRS -->
+  <div class="project-detail fade fade-d1">
+    <div class="pd-header">
+      <div class="pd-name">PIRS — Predictive Insider Risk & Stabilization System</div>
+      <span class="pd-year">2026</span>
     </div>
+    <p class="pd-desc">A 9-layer prediction pipeline that detects insider threats 3–14 days before attack by modelling behavioural drift across 4,000 employees.</p>
+    <div class="pd-metrics">
+      <span class="pd-metric"><span class="val">0.8554</span> ROC-AUC</span>
+      <span class="pd-metric"><span class="val">1.3M</span> records</span>
+      <span class="pd-metric"><span class="val">3/5</span> threats detected</span>
+      <span class="pd-metric"><span class="val">15%</span> better prevention</span>
+    </div>
+    <ul class="bullets">
+      <li>Built ensemble using Isolation Forest, LSTM Autoencoder, and One-Class SVM</li>
+      <li>Q-learning module matches interventions to personality profiles</li>
+      <li>Cross-validated on LANL dataset (12,416 users, 69GB auth logs) — ROC-AUC 0.7429</li>
+    </ul>
+    <div class="pd-tags"><span>Python</span><span>PyTorch</span><span>Scikit-learn</span><span>Q-Learning</span><span>LSTM</span><span>Isolation Forest</span></div>
+    <a href="https://github.com/roshnrf/PIRS" target="_blank" class="pd-link">GitHub →</a>
   </div>
 
-  <!-- Projects -->
-  <section style="padding-top: 0;">
-    <div class="container">
-      <div class="projects-grid">
-
-        <!-- PIRS -->
-        <div class="project-card fade-in">
-          <div class="project-header">
-            <h3 class="project-name">PIRS — Predictive Insider Risk & Stabilization System</h3>
-            <span class="project-year">2026</span>
-          </div>
-          <p class="project-desc">
-            A 9-layer prediction pipeline that detects insider threats 3–14 days before attack by modelling behavioural drift across 4,000 employees. Uses ensemble anomaly detection and reinforcement learning to match interventions to personality profiles.
-          </p>
-          <div class="project-metrics">
-            <span class="metric"><span class="metric-value">0.8554</span> ROC-AUC</span>
-            <span class="metric"><span class="metric-value">1.3M</span> records</span>
-            <span class="metric"><span class="metric-value">3/5</span> threats detected</span>
-            <span class="metric"><span class="metric-value">15%</span> better prevention</span>
-          </div>
-          <div class="project-tech">
-            <span>Python</span>
-            <span>PyTorch</span>
-            <span>Scikit-learn</span>
-            <span>Q-Learning</span>
-            <span>LSTM</span>
-            <span>Isolation Forest</span>
-          </div>
-          <div class="project-links">
-            <a href="https://github.com/roshnrf/PIRS" target="_blank">GitHub →</a>
-          </div>
-        </div>
-
-        <!-- StoryWeaver -->
-        <div class="project-card fade-in">
-          <div class="project-header">
-            <h3 class="project-name">StoryWeaver — AI-Powered Speech Therapy Platform</h3>
-            <span class="project-year">2025</span>
-          </div>
-          <p class="project-desc">
-            A full-stack speech therapy platform for children ages 4–6. Integrates OpenAI Whisper for Indian-accented speech recognition, Google Gemini for multi-error NLP detection, and personalised story generation to improve pronunciation through practice.
-          </p>
-          <div class="project-metrics">
-            <span class="metric"><span class="metric-value">88%</span> ASR accuracy</span>
-            <span class="metric"><span class="metric-value">85–91%</span> error detection</span>
-            <span class="metric"><span class="metric-value">15%</span> pronunciation gain</span>
-          </div>
-          <div class="project-tech">
-            <span>Python</span>
-            <span>Streamlit</span>
-            <span>Whisper</span>
-            <span>Gemini 2.5 Flash</span>
-            <span>gTTS</span>
-            <span>NLP</span>
-          </div>
-          <div class="project-links">
-            <a href="https://github.com/roshnrf/StoryWeaver" target="_blank">GitHub →</a>
-          </div>
-        </div>
-
-        <!-- License Plate Recognition -->
-        <div class="project-card fade-in">
-          <div class="project-header">
-            <h3 class="project-name">License Plate Recognition — AWS Serverless</h3>
-            <span class="project-year">2025</span>
-          </div>
-          <p class="project-desc">
-            An event-driven serverless application on AWS. S3 uploads trigger Lambda functions that invoke Rekognition for license plate OCR. Results are stored in DynamoDB and served via a RESTful API Gateway endpoint for downstream consumers.
-          </p>
-          <div class="project-metrics">
-            <span class="metric"><span class="metric-value">Serverless</span> architecture</span>
-            <span class="metric"><span class="metric-value">Auto-scaling</span> processing</span>
-            <span class="metric"><span class="metric-value">REST</span> API</span>
-          </div>
-          <div class="project-tech">
-            <span>AWS Lambda</span>
-            <span>S3</span>
-            <span>Rekognition</span>
-            <span>DynamoDB</span>
-            <span>API Gateway</span>
-          </div>
-          <div class="project-links">
-            <a href="https://github.com/roshnrf/License-Plate-Recognition-AWS" target="_blank">GitHub →</a>
-          </div>
-        </div>
-
-        <!-- FreshStock AI -->
-        <div class="project-card fade-in">
-          <div class="project-header">
-            <h3 class="project-name">FreshStock AI — Smart Inventory Management</h3>
-            <span class="project-year">2025</span>
-          </div>
-          <p class="project-desc">
-            ML-driven inventory optimization for small grocery stores. Uses Random Forest models with time-series feature engineering and market segmentation to automate reordering and pricing decisions, reducing food waste significantly.
-          </p>
-          <div class="project-metrics">
-            <span class="metric"><span class="metric-value">87.3%</span> forecast accuracy</span>
-            <span class="metric"><span class="metric-value">25–40%</span> waste reduction</span>
-          </div>
-          <div class="project-tech">
-            <span>Python</span>
-            <span>Scikit-learn</span>
-            <span>Pandas</span>
-            <span>Random Forest</span>
-            <span>Time-Series</span>
-          </div>
-          <div class="project-links">
-            <a href="https://github.com/roshnrf/FreshStock-AI---Smart-Inventory-Management-System" target="_blank">GitHub →</a>
-          </div>
-        </div>
-
-        <!-- DiCE -->
-        <div class="project-card fade-in">
-          <div class="project-header">
-            <h3 class="project-name">Diverse Counterfactual Explanations (DiCE)</h3>
-            <span class="project-year">2025</span>
-          </div>
-          <p class="project-desc">
-            Exploring explainable AI through diverse counterfactual explanations — generating feature-perturbed instances that flip model predictions to help users understand what changes would lead to different outcomes.
-          </p>
-          <div class="project-tech">
-            <span>Python</span>
-            <span>DiCE</span>
-            <span>Explainable AI</span>
-            <span>Scikit-learn</span>
-          </div>
-          <div class="project-links">
-            <a href="https://github.com/roshnrf/Diverse-Counterfactual-Explanations-DICE" target="_blank">GitHub →</a>
-          </div>
-        </div>
-
-      </div>
+  <!-- StoryWeaver -->
+  <div class="project-detail fade fade-d2">
+    <div class="pd-header">
+      <div class="pd-name">StoryWeaver — AI-Powered Speech Therapy Platform</div>
+      <span class="pd-year">2025</span>
     </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-links">
-        <a href="https://github.com/roshnrf" target="_blank">GitHub</a>
-        <a href="https://linkedin.com/in/rosh003" target="_blank">LinkedIn</a>
-        <a href="https://medium.com/@rosh003" target="_blank">Medium</a>
-      </div>
-      <p>Built by Roshan A Rauof · 2026</p>
+    <p class="pd-desc">Full-stack speech therapy platform for children ages 4–6 with real-time ASR, NLP error detection, and personalised story generation.</p>
+    <div class="pd-metrics">
+      <span class="pd-metric"><span class="val">88%</span> ASR accuracy</span>
+      <span class="pd-metric"><span class="val">85–91%</span> error detection</span>
+      <span class="pd-metric"><span class="val">15%</span> pronunciation gain</span>
     </div>
-  </footer>
+    <ul class="bullets">
+      <li>OpenAI Whisper optimised for Indian-accented English across ages 4–6</li>
+      <li>Multi-error NLP pipeline using Google Gemini 2.5 Flash</li>
+      <li>Generates personalised practice stories embedding each child's error words</li>
+    </ul>
+    <div class="pd-tags"><span>Python</span><span>Streamlit</span><span>Whisper</span><span>Gemini</span><span>gTTS</span><span>NLP</span></div>
+    <a href="https://github.com/roshnrf/StoryWeaver" target="_blank" class="pd-link">GitHub →</a>
+  </div>
 
-  <script src="assets/js/main.js"></script>
+  <!-- License Plate -->
+  <div class="project-detail fade fade-d3">
+    <div class="pd-header">
+      <div class="pd-name">License Plate Recognition — AWS Serverless</div>
+      <span class="pd-year">2025</span>
+    </div>
+    <p class="pd-desc">Event-driven serverless application on AWS for automated license plate detection and text extraction.</p>
+    <ul class="bullets">
+      <li>S3 uploads trigger Lambda functions invoking Rekognition for OCR</li>
+      <li>RESTful API via API Gateway backed by DynamoDB for persistent storage</li>
+      <li>Designed for smart-city, parking, and fleet tracking use cases</li>
+    </ul>
+    <div class="pd-tags"><span>AWS Lambda</span><span>S3</span><span>Rekognition</span><span>DynamoDB</span><span>API Gateway</span></div>
+    <a href="https://github.com/roshnrf/License-Plate-Recognition-AWS" target="_blank" class="pd-link">GitHub →</a>
+  </div>
+
+  <!-- FreshStock -->
+  <div class="project-detail fade fade-d4">
+    <div class="pd-header">
+      <div class="pd-name">FreshStock AI — Smart Inventory Management</div>
+      <span class="pd-year">2025</span>
+    </div>
+    <p class="pd-desc">ML-driven inventory optimization for small grocery stores with demand forecasting and automated reordering.</p>
+    <div class="pd-metrics">
+      <span class="pd-metric"><span class="val">87.3%</span> forecast accuracy</span>
+      <span class="pd-metric"><span class="val">25–40%</span> waste reduction</span>
+    </div>
+    <ul class="bullets">
+      <li>Random Forest models with time-series feature engineering</li>
+      <li>Market segmentation to automate pricing decisions</li>
+    </ul>
+    <div class="pd-tags"><span>Python</span><span>Scikit-learn</span><span>Pandas</span><span>Random Forest</span></div>
+    <a href="https://github.com/roshnrf/FreshStock-AI---Smart-Inventory-Management-System" target="_blank" class="pd-link">GitHub →</a>
+  </div>
+
+  <footer class="footer">Designed & Built by Roshan A Rauof</footer>
+</div>
+
 </body>
 </html>

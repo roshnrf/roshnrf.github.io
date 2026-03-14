@@ -4,90 +4,80 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog — Roshan A Rauof</title>
-  <meta name="description" content="Writing about ML, AI engineering, and things I learn along the way.">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#181822;--bg2:#1f1f2c;--bg3:#262636;--bg4:#2d2d40;--text:#d0d0dc;--text2:#8888a0;--text3:#555568;--accent:#b8b8cc;--accent-bright:#e0e0f0;--green:#7ec699;--blue:#7aa2f7;--purple:#9d7cd8;--orange:#e0a370;--border:#2a2a3c;--border-light:#363648;--mono:'IBM Plex Mono',monospace;--sans:'Outfit',sans-serif}
+    *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+    ::selection{background:var(--purple);color:#fff}
+    a{color:var(--blue);text-decoration:none;transition:0.3s}a:hover{color:var(--accent-bright)}
+    .container{max-width:820px;margin:0 auto;padding:0 2rem}
+    .float-nav{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);display:flex;gap:0.2rem;padding:0.45rem;background:rgba(24,24,34,0.92);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:12px;z-index:100;font-family:var(--mono);font-size:0.7rem}
+    .float-nav a{color:var(--text3);padding:0.4rem 0.85rem;border-radius:8px;transition:0.3s;text-decoration:none}.float-nav a:hover,.float-nav a.active{color:var(--accent-bright);background:var(--bg3)}
+    .section-line{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}.section-label{font-family:var(--mono);font-size:0.72rem;text-transform:uppercase;letter-spacing:3px;color:var(--text3);white-space:nowrap}.section-line::after{content:'';flex:1;height:1px;background:var(--border)}
+    .page-header{padding-top:6rem;margin-bottom:0.5rem}
+    .page-desc{color:var(--text2);font-size:0.92rem;margin-bottom:2.5rem;max-width:550px}
+    .blog-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .blog-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem;transition:0.4s;display:flex;flex-direction:column;text-decoration:none;color:inherit}
+    .blog-card:hover{border-color:var(--border-light);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,0.3)}
+    .blog-date{font-family:var(--mono);font-size:0.7rem;color:var(--text3);margin-bottom:0.5rem}
+    .blog-title{font-size:1rem;font-weight:600;margin-bottom:0.4rem;color:var(--text);line-height:1.4}
+    .blog-excerpt{color:var(--text2);font-size:0.82rem;line-height:1.6;flex-grow:1;margin-bottom:0.8rem}
+    .blog-read{font-family:var(--mono);font-size:0.75rem;color:var(--blue)}
+    .blog-placeholder{border-style:dashed;display:flex;align-items:center;justify-content:center;min-height:180px}
+    .blog-placeholder p{color:var(--text3);font-size:0.85rem}
+    .footer{text-align:center;padding:2rem 0 4rem;font-size:0.72rem;color:var(--text3);font-family:var(--mono)}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    .fade{animation:fadeIn 0.5s ease forwards}.fade-d1{animation-delay:0.1s;opacity:0}.fade-d2{animation-delay:0.2s;opacity:0}
+    @media(max-width:640px){.blog-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-logo">roshan<span>.dev</span></a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="assets/Roshan_A_Rauof_Resume.pdf" target="_blank">Resume</a></li>
-        <li><a href="playground.html">Playground</a></li>
-        <li><a href="index.html#contact">Contact</a></li>
-      </ul>
-      <button class="nav-toggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
+<nav class="float-nav">
+  <a href="index.html">Home</a>
+  <a href="projects.html">Projects</a>
+  <a href="playground.html">Playground</a>
+  <a href="blog.html" class="active">Blog</a>
+  <a href="assets/Roshan_A_Rauof_Resume.pdf" target="_blank">Resume</a>
+</nav>
 
-  <!-- Page Header -->
-  <div class="page-header">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-label">// thoughts & learnings</p>
-        <h2 class="section-title">Blog</h2>
-        <p class="section-subtitle">Writing about ML concepts, project breakdowns, and lessons from building things.</p>
-      </div>
+<div class="container">
+  <div class="page-header fade">
+    <div class="section-line"><span class="section-label">Blog</span></div>
+  </div>
+  <p class="page-desc fade fade-d1">Writing about ML concepts, project breakdowns, and lessons from building things.</p>
+
+  <div class="blog-grid">
+    <a href="blog/insider-threat-detection.html" class="blog-card fade fade-d1">
+      <span class="blog-date">Mar 2026</span>
+      <h3 class="blog-title">How I Built a 9-Layer Insider Threat Detection Pipeline</h3>
+      <p class="blog-excerpt">Breaking down PIRS — from raw CERT r6.2 data to a Q-learning intervention engine processing 1.3M records.</p>
+      <span class="blog-read">Read more →</span>
+    </a>
+
+    <a href="blog/whisper-kids-speech.html" class="blog-card fade fade-d1">
+      <span class="blog-date">Feb 2026</span>
+      <h3 class="blog-title">Making Whisper Work for Children's Indian-Accented Speech</h3>
+      <p class="blog-excerpt">The challenges of ASR on young speakers with non-standard accents, and how we hit 88% accuracy.</p>
+      <span class="blog-read">Read more →</span>
+    </a>
+
+    <a href="blog/serverless-cv-aws.html" class="blog-card fade fade-d1">
+      <span class="blog-date">Jan 2026</span>
+      <h3 class="blog-title">Event-Driven Computer Vision on AWS — No Servers Required</h3>
+      <p class="blog-excerpt">Building license plate recognition with Lambda, S3, Rekognition, and API Gateway.</p>
+      <span class="blog-read">Read more →</span>
+    </a>
+
+    <div class="blog-card blog-placeholder fade fade-d2">
+      <p>More posts coming soon...</p>
     </div>
   </div>
 
-  <!-- Blog Grid -->
-  <section style="padding-top: 0;">
-    <div class="container">
-      <div class="blog-grid">
+  <footer class="footer">Designed & Built by Roshan A Rauof</footer>
+</div>
 
-        <!-- Sample Post 1 -->
-        <a href="blog/insider-threat-detection.html" class="blog-card fade-in" style="text-decoration: none; color: inherit;">
-          <span class="blog-date">Mar 2026</span>
-          <h3 class="blog-title">How I Built a 9-Layer Insider Threat Detection Pipeline</h3>
-          <p class="blog-excerpt">Breaking down the architecture of PIRS — from raw CERT r6.2 data to a Q-learning intervention engine processing 1.3M records.</p>
-          <span class="blog-read-more">Read more →</span>
-        </a>
-
-        <!-- Sample Post 2 -->
-        <a href="blog/whisper-kids-speech.html" class="blog-card fade-in" style="text-decoration: none; color: inherit;">
-          <span class="blog-date">Feb 2026</span>
-          <h3 class="blog-title">Making Whisper Work for Children's Indian-Accented Speech</h3>
-          <p class="blog-excerpt">The challenges of ASR on young speakers with non-standard accents, and how we got to 88% transcription accuracy.</p>
-          <span class="blog-read-more">Read more →</span>
-        </a>
-
-        <!-- Sample Post 3 -->
-        <a href="blog/serverless-cv-aws.html" class="blog-card fade-in" style="text-decoration: none; color: inherit;">
-          <span class="blog-date">Jan 2026</span>
-          <h3 class="blog-title">Event-Driven Computer Vision on AWS — No Servers Required</h3>
-          <p class="blog-excerpt">Building a license plate recognition system with Lambda, S3, Rekognition, and API Gateway — and what I learned about serverless architecture.</p>
-          <span class="blog-read-more">Read more →</span>
-        </a>
-
-        <!-- Placeholder -->
-        <div class="blog-card fade-in" style="display: flex; align-items: center; justify-content: center; min-height: 200px; border-style: dashed;">
-          <p style="color: var(--text-muted); font-size: 0.9rem;">More posts coming soon...</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-links">
-        <a href="https://github.com/roshnrf" target="_blank">GitHub</a>
-        <a href="https://linkedin.com/in/rosh003" target="_blank">LinkedIn</a>
-        <a href="https://medium.com/@rosh003" target="_blank">Medium</a>
-      </div>
-      <p>Built by Roshan A Rauof · 2026</p>
-    </div>
-  </footer>
-
-  <script src="assets/js/main.js"></script>
 </body>
 </html>

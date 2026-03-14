@@ -821,19 +821,6 @@ const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.15 });
 document.querySelectorAll('.fade-on-scroll').forEach(el => obs.observe(el));
-
-// Auto welcome message on load
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    const botDiv = document.createElement('div');
-    botDiv.className = 'msg';
-    const botContent = document.createElement('div');
-    botContent.className = 'msg-bot';
-    botDiv.appendChild(botContent);
-    messagesEl.appendChild(botDiv);
-    typeText(botContent, "Hey! I'm <span class='hl'>Roshan</span> — an aspiring AI/ML Engineer from Chennai. I build ML pipelines, speech processing systems, and serverless apps. Ask me anything or pick a prompt above ↑");
-  }, 1200);
-});
 </script>
 
 </body>
