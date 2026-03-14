@@ -4,27 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ML Playground — Roshan A Rauof</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
   <meta name="description" content="Interactive machine learning playground. Click to create data, pick an algorithm, tune parameters, watch decision boundaries form in real-time.">
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0a0f;
-      --bg2: #12121a;
-      --bg3: #16161f;
-      --bg4: #1c1c28;
-      --text: #e8e8ed;
-      --text2: #8a8a9a;
-      --text3: #55556a;
-      --accent: #4ecdc4;
-      --accent-dim: rgba(78,205,196,0.12);
-      --accent-glow: rgba(78,205,196,0.3);
-      --classA: #4ecdc4;
-      --classB: #ff6b6b;
-      --classA-soft: rgba(78,205,196,0.35);
-      --classB-soft: rgba(255,107,107,0.35);
-      --border: #1e1e2e;
-      --font: 'Sora', sans-serif;
-      --mono: 'JetBrains Mono', monospace;
+      --bg: #181822;
+      --bg2: #1f1f2c;
+      --bg3: #262636;
+      --bg4: #2d2d40;
+      --text: #d0d0dc;
+      --text2: #8888a0;
+      --text3: #555568;
+      --accent: #7aa2f7;
+      --accent-dim: rgba(122,162,247,0.12);
+      --accent-glow: rgba(122,162,247,0.3);
+      --classA: #7ec699;
+      --classB: #f7768e;
+      --classA-soft: rgba(126,198,153,0.35);
+      --classB-soft: rgba(247,118,142,0.35);
+      --border: #2a2a3c;
+      --font: 'Outfit', sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -46,34 +47,25 @@
       z-index:0;
     }
 
-    /* Nav */
-    .nav {
-      position:fixed; top:0; width:100%; z-index:100;
-      padding:1.2rem 2rem;
-      background:rgba(10,10,15,0.85);
-      backdrop-filter:blur(12px);
-      border-bottom:1px solid var(--border);
+    /* Floating Nav */
+    .float-nav {
+      position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
+      display:flex;gap:0.2rem;padding:0.45rem;
+      background:rgba(24,24,34,0.92);backdrop-filter:blur(16px);
+      border:1px solid var(--border);border-radius:12px;z-index:100;
+      font-family:var(--mono);font-size:0.7rem;
     }
-    .nav-inner {
-      max-width:1200px; margin:0 auto;
-      display:flex; justify-content:space-between; align-items:center;
+    .float-nav a {
+      color:var(--text3);padding:0.4rem 0.85rem;border-radius:8px;
+      transition:0.3s;text-decoration:none;
     }
-    .nav-logo {
-      font-family:var(--mono); font-size:1.1rem; font-weight:500;
-      color:var(--accent); text-decoration:none;
+    .float-nav a:hover,.float-nav a.active {
+      color:#e0e0f0;background:var(--bg3);
     }
-    .nav-logo span { color:var(--text3); }
-    .nav-links { display:flex; gap:2rem; list-style:none; }
-    .nav-links a {
-      color:var(--text2); font-size:0.85rem; text-decoration:none;
-      text-transform:uppercase; letter-spacing:0.5px;
-      transition:color 0.3s;
-    }
-    .nav-links a:hover { color:var(--accent); }
 
     /* Main layout */
     .playground {
-      max-width:1200px; margin:0 auto; padding:5.5rem 2rem 2rem;
+      max-width:1200px; margin:0 auto; padding:2rem 2rem 5rem;
       position:relative; z-index:1;
     }
 
@@ -203,11 +195,11 @@
       background:var(--accent);
     }
     .btn-danger {
-      border-color:#ff6b6b33;
-      color:#ff6b6b;
+      border-color:#f7768e33;
+      color:#f7768e;
     }
     .btn-danger:hover {
-      border-color:#ff6b6b;
+      border-color:#f7768e;
       background:rgba(255,107,107,0.12);
     }
     .btn-primary {
@@ -217,7 +209,7 @@
       font-weight:600;
     }
     .btn-primary:hover {
-      background:#7eddd6;
+      background:#9dd6b0;
       box-shadow:0 4px 16px var(--accent-glow);
       transform:translateY(-1px);
     }
@@ -353,10 +345,10 @@
       font-size:1rem;
       font-weight:600;
     }
-    .cm-tp { color:#4ecdc4; }
-    .cm-tn { color:#4ecdc4; }
-    .cm-fp { color:#ff6b6b; }
-    .cm-fn { color:#ff6b6b; }
+    .cm-tp { color:#7ec699; }
+    .cm-tn { color:#7ec699; }
+    .cm-fp { color:#f7768e; }
+    .cm-fn { color:#f7768e; }
 
     /* Train animation */
     .training-pulse {
@@ -410,17 +402,13 @@
 </head>
 <body>
 
-  <!-- Nav -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-logo">roshan<span>.dev</span></a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="playground.html" style="color:var(--accent);">Playground</a></li>
-      </ul>
-    </div>
+  <!-- Floating Nav -->
+  <nav class="float-nav">
+    <a href="index.html">Home</a>
+    <a href="projects.html">Projects</a>
+    <a href="playground.html" class="active">Playground</a>
+    <a href="blog.html">Blog</a>
+    <a href="assets/Roshan_A_Rauof_Resume.pdf" target="_blank">Resume</a>
   </nav>
 
   <div class="playground">
@@ -703,9 +691,9 @@ function draw() {
       for(let px = 0; px < W; px += res) {
         const idx = Math.floor(py/res) * Math.ceil(W/res) + Math.floor(px/res);
         const val = boundaryData[idx];
-        const r = val === 0 ? 78 : 255;
-        const g = val === 0 ? 205 : 107;
-        const b = val === 0 ? 196 : 107;
+        const r = val === 0 ? 126 : 247;
+        const g = val === 0 ? 198 : 118;
+        const b = val === 0 ? 153 : 142;
         for(let dy = 0; dy < res && py+dy < H; dy++) {
           for(let dx = 0; dx < res && px+dx < W; dx++) {
             const i = ((py+dy)*W + (px+dx)) * 4;
@@ -735,15 +723,15 @@ function draw() {
     // Glow
     ctx.beginPath();
     ctx.arc(p.x, p.y, 12, 0, Math.PI*2);
-    ctx.fillStyle = p.c === 0 ? 'rgba(78,205,196,0.15)' : 'rgba(255,107,107,0.15)';
+    ctx.fillStyle = p.c === 0 ? 'rgba(126,198,153,0.15)' : 'rgba(247,118,142,0.15)';
     ctx.fill();
 
     // Point
     ctx.beginPath();
     ctx.arc(p.x, p.y, 5, 0, Math.PI*2);
-    ctx.fillStyle = p.c === 0 ? '#4ecdc4' : '#ff6b6b';
+    ctx.fillStyle = p.c === 0 ? '#7ec699' : '#f7768e';
     ctx.fill();
-    ctx.strokeStyle = p.c === 0 ? '#7eddd6' : '#ff9999';
+    ctx.strokeStyle = p.c === 0 ? '#a0dbb5' : '#f7a0b0';
     ctx.lineWidth = 1.5;
     ctx.stroke();
   });
