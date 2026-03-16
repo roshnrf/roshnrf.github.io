@@ -9,11 +9,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:          #020203;
-      --surface:     rgba(255,255,255,0.04);
-      --surface-h:   rgba(255,255,255,0.07);
-      --border:      rgba(255,255,255,0.08);
-      --border-h:    rgba(255,255,255,0.16);
+      --bg:          #07071a;
+      --surface:     rgba(255,255,255,0.08);
+      --surface-h:   rgba(255,255,255,0.13);
+      --border:      rgba(255,255,255,0.13);
+      --border-h:    rgba(255,255,255,0.26);
       --text:        #EDEDEF;
       --text2:       #8A8F98;
       --text3:       #4A4F58;
@@ -46,10 +46,10 @@
 
     /* Blobs */
     .blobs { position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
-    .blob { position:absolute; border-radius:50%; filter:blur(80px); opacity:0.10; animation:drift linear infinite; }
-    .blob-1 { width:500px; height:500px; background:radial-gradient(circle,#5E6AD2,transparent 70%); top:-150px; left:-80px; animation-duration:22s; }
-    .blob-2 { width:400px; height:400px; background:radial-gradient(circle,#A78BFA,transparent 70%); bottom:-80px; right:-80px; animation-duration:28s; animation-direction:reverse; }
-    .blob-3 { width:250px; height:250px; background:radial-gradient(circle,#30D68A,transparent 70%); top:50%; left:60%; animation-duration:20s; opacity:0.06; }
+    .blob { position:absolute; border-radius:50%; filter:blur(60px); opacity:0.26; animation:drift linear infinite; }
+    .blob-1 { width:620px; height:620px; background:radial-gradient(circle,#5E6AD2,transparent 65%); top:-160px; left:-90px; animation-duration:22s; }
+    .blob-2 { width:520px; height:520px; background:radial-gradient(circle,#A78BFA,transparent 65%); bottom:-90px; right:-90px; animation-duration:28s; animation-direction:reverse; }
+    .blob-3 { width:320px; height:320px; background:radial-gradient(circle,#30D68A,transparent 65%); top:50%; left:60%; animation-duration:20s; opacity:0.14; }
 
     @keyframes drift {
       0%   { transform:translate(0,0) scale(1); }
@@ -98,13 +98,15 @@
     .projects-list { display:flex; flex-direction:column; gap:1px; padding-bottom:6rem; }
 
     .project-card {
-      background:var(--surface);
-      border:1px solid var(--border);
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
       border-radius:16px;
       padding:2rem 2rem 1.75rem;
       transition:border-color 0.25s, background 0.25s, transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
       position:relative; overflow:hidden;
       margin-bottom:0.75rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.10);
     }
     .project-card::before {
       content:''; position:absolute; top:0; left:0; right:0; height:1px;
@@ -112,10 +114,10 @@
       opacity:0; transition:opacity 0.3s;
     }
     .project-card:hover {
-      border-color:var(--border-h);
-      background:var(--surface-h);
-      transform:translateY(-2px);
-      box-shadow:0 12px 40px rgba(0,0,0,0.4);
+      border-color: rgba(255,255,255,0.28);
+      background: rgba(255,255,255,0.10);
+      transform:translateY(-3px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.14);
     }
     .project-card:hover::before { opacity:1; }
 
