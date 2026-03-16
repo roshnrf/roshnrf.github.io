@@ -6,26 +6,26 @@
   <title>ML Playground — Roshan A Rauof</title>
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
   <meta name="description" content="Interactive machine learning playground. Click to create data, pick an algorithm, tune parameters, watch decision boundaries form in real-time.">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #181822;
-      --bg2: #1f1f2c;
-      --bg3: #262636;
-      --bg4: #2d2d40;
-      --text: #d0d0dc;
-      --text2: #8888a0;
-      --text3: #555568;
-      --accent: #7aa2f7;
-      --accent-dim: rgba(122,162,247,0.12);
-      --accent-glow: rgba(122,162,247,0.3);
-      --classA: #7ec699;
-      --classB: #f7768e;
-      --classA-soft: rgba(126,198,153,0.35);
-      --classB-soft: rgba(247,118,142,0.35);
-      --border: #2a2a3c;
-      --font: 'Outfit', sans-serif;
-      --mono: 'IBM Plex Mono', monospace;
+      --bg:          #090912;
+      --bg2:         #0E0E1A;
+      --bg3:         #131320;
+      --bg4:         #1A1A2A;
+      --text:        #EEEEF6;
+      --text2:       #7878A0;
+      --text3:       #46466A;
+      --accent:      #7B6EF0;
+      --accent-dim:  rgba(123,110,240,0.12);
+      --accent-glow: rgba(123,110,240,0.28);
+      --classA:      #4CD68A;
+      --classB:      #FF7A8A;
+      --classA-soft: rgba(76,214,138,0.35);
+      --classB-soft: rgba(255,122,138,0.35);
+      --border:      #18182A;
+      --font: 'Inter', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -42,7 +42,7 @@
       content:'';
       position:fixed;
       inset:0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
       pointer-events:none;
       z-index:0;
     }
@@ -50,17 +50,17 @@
     /* Floating Nav */
     .float-nav {
       position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
-      display:flex;gap:0.2rem;padding:0.45rem;
-      background:rgba(24,24,34,0.92);backdrop-filter:blur(16px);
-      border:1px solid var(--border);border-radius:12px;z-index:100;
-      font-family:var(--mono);font-size:0.7rem;
+      display:flex;gap:0.15rem;padding:0.4rem;
+      background:rgba(9,9,18,0.88);backdrop-filter:blur(20px);
+      border:1px solid var(--border);border-radius:13px;z-index:100;
+      font-family:var(--mono);font-size:0.68rem;
     }
     .float-nav a {
-      color:var(--text3);padding:0.4rem 0.85rem;border-radius:8px;
-      transition:0.3s;text-decoration:none;
+      color:var(--text3);padding:0.38rem 0.85rem;border-radius:9px;
+      transition:0.25s;text-decoration:none;letter-spacing:0.02em;
     }
     .float-nav a:hover,.float-nav a.active {
-      color:#e0e0f0;background:var(--bg3);
+      color:var(--text);background:var(--bg3);
     }
 
     /* Main layout */
@@ -293,7 +293,7 @@
       transition:border-color 0.3s;
     }
     .metric-card:hover {
-      border-color:rgba(78,205,196,0.3);
+      border-color:rgba(123,110,240,0.3);
     }
     .metric-number {
       font-family:var(--mono);
@@ -345,10 +345,10 @@
       font-size:1rem;
       font-weight:600;
     }
-    .cm-tp { color:#7ec699; }
-    .cm-tn { color:#7ec699; }
-    .cm-fp { color:#f7768e; }
-    .cm-fn { color:#f7768e; }
+    .cm-tp { color:#4CD68A; }
+    .cm-tn { color:#4CD68A; }
+    .cm-fp { color:#FF7A8A; }
+    .cm-fn { color:#FF7A8A; }
 
     /* Train animation */
     .training-pulse {
@@ -674,7 +674,7 @@ function draw() {
   ctx.clearRect(0, 0, W, H);
 
   // Draw grid
-  ctx.strokeStyle = 'rgba(30,30,46,0.5)';
+  ctx.strokeStyle = 'rgba(24,24,42,0.6)';
   ctx.lineWidth = 0.5;
   for(let i = 0; i < W; i += 40) {
     ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,H); ctx.stroke();
@@ -691,9 +691,9 @@ function draw() {
       for(let px = 0; px < W; px += res) {
         const idx = Math.floor(py/res) * Math.ceil(W/res) + Math.floor(px/res);
         const val = boundaryData[idx];
-        const r = val === 0 ? 126 : 247;
-        const g = val === 0 ? 198 : 118;
-        const b = val === 0 ? 153 : 142;
+        const r = val === 0 ? 76  : 255;
+        const g = val === 0 ? 214 : 122;
+        const b = val === 0 ? 138 : 138;
         for(let dy = 0; dy < res && py+dy < H; dy++) {
           for(let dx = 0; dx < res && px+dx < W; dx++) {
             const i = ((py+dy)*W + (px+dx)) * 4;
@@ -708,7 +708,7 @@ function draw() {
     ctx.putImageData(imgData, 0, 0);
 
     // Redraw grid on top
-    ctx.strokeStyle = 'rgba(30,30,46,0.3)';
+    ctx.strokeStyle = 'rgba(24,24,42,0.3)';
     ctx.lineWidth = 0.5;
     for(let i = 0; i < W; i += 40) {
       ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,H); ctx.stroke();
@@ -723,15 +723,15 @@ function draw() {
     // Glow
     ctx.beginPath();
     ctx.arc(p.x, p.y, 12, 0, Math.PI*2);
-    ctx.fillStyle = p.c === 0 ? 'rgba(126,198,153,0.15)' : 'rgba(247,118,142,0.15)';
+    ctx.fillStyle = p.c === 0 ? 'rgba(76,214,138,0.15)' : 'rgba(255,122,138,0.15)';
     ctx.fill();
 
     // Point
     ctx.beginPath();
     ctx.arc(p.x, p.y, 5, 0, Math.PI*2);
-    ctx.fillStyle = p.c === 0 ? '#7ec699' : '#f7768e';
+    ctx.fillStyle = p.c === 0 ? '#4CD68A' : '#FF7A8A';
     ctx.fill();
-    ctx.strokeStyle = p.c === 0 ? '#a0dbb5' : '#f7a0b0';
+    ctx.strokeStyle = p.c === 0 ? '#7EEAAE' : '#FFA0AE';
     ctx.lineWidth = 1.5;
     ctx.stroke();
   });
