@@ -4,122 +4,257 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog — Roshan A Rauof</title>
+  <meta name="description" content="Writing about ML concepts, project breakdowns, and lessons from building things.">
   <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#090912;--bg2:#0E0E1A;--bg3:#131320;--bg4:#1A1A2A;
-      --text:#EEEEF6;--text2:#7878A0;--text3:#46466A;
-      --accent:#7B6EF0;--accent-dim:rgba(123,110,240,0.10);--accent-glow:rgba(123,110,240,0.22);
-      --green:#4CD68A;--blue:#5AABFF;--purple:#A98EFC;--orange:#FF9A5C;
-      --border:#18182A;--border-light:#262640;
-      --mono:'JetBrains Mono',monospace;--sans:'Inter',sans-serif;
+    :root {
+      --bg:          #020203;
+      --surface:     rgba(255,255,255,0.04);
+      --surface-h:   rgba(255,255,255,0.07);
+      --border:      rgba(255,255,255,0.08);
+      --border-h:    rgba(255,255,255,0.16);
+      --text:        #EDEDEF;
+      --text2:       #8A8F98;
+      --text3:       #4A4F58;
+      --accent:      #5E6AD2;
+      --accent-dim:  rgba(94,106,210,0.15);
+      --green:       #30D68A;
+      --blue:        #60A5FA;
+      --purple:      #A78BFA;
+      --orange:      #FB923C;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Inter', sans-serif;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
     }
-    *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
-    body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
-    ::selection{background:var(--accent);color:#fff}
-    a{color:var(--blue);text-decoration:none;transition:color 0.25s}a:hover{color:var(--text)}
-    .container{max-width:820px;margin:0 auto;padding:0 2rem}
 
-    /* Floating nav */
-    .float-nav{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);display:flex;gap:0.15rem;padding:0.4rem;background:rgba(9,9,18,0.88);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:13px;z-index:100;font-family:var(--mono);font-size:0.68rem}
-    .float-nav a{color:var(--text3);padding:0.38rem 0.85rem;border-radius:9px;transition:all 0.25s;text-decoration:none;letter-spacing:0.02em}
-    .float-nav a:hover,.float-nav a.active{color:var(--text);background:var(--bg3);text-decoration:none}
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
 
-    /* Section label */
-    .section-line{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
-    .section-label{font-family:var(--mono);font-size:0.68rem;text-transform:uppercase;letter-spacing:0.18em;color:var(--text3);white-space:nowrap}
-    .section-line::after{content:'';flex:1;height:1px;background:var(--border)}
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
 
-    .page-header{padding-top:6rem;margin-bottom:0.5rem}
-    .page-desc{color:var(--text2);font-size:0.9rem;margin-bottom:2.5rem;max-width:580px;line-height:1.65}
+    ::selection { background: var(--accent); color: #fff; }
+    a { color: inherit; text-decoration: none; }
+
+    /* Blobs */
+    .blobs { position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+    .blob { position:absolute; border-radius:50%; filter:blur(80px); opacity:0.10; animation:drift linear infinite; }
+    .blob-1 { width:500px; height:500px; background:radial-gradient(circle,#5E6AD2,transparent 70%); top:-150px; right:-100px; animation-duration:24s; }
+    .blob-2 { width:350px; height:350px; background:radial-gradient(circle,#A78BFA,transparent 70%); bottom:-80px; left:-80px; animation-duration:20s; animation-direction:reverse; }
+    .blob-3 { width:220px; height:220px; background:radial-gradient(circle,#60A5FA,transparent 70%); top:40%; left:30%; animation-duration:18s; opacity:0.06; }
+
+    @keyframes drift {
+      0%   { transform:translate(0,0) scale(1); }
+      33%  { transform:translate(40px,-30px) scale(1.05); }
+      66%  { transform:translate(-20px,40px) scale(0.97); }
+      100% { transform:translate(0,0) scale(1); }
+    }
+
+    /* Nav */
+    .nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      padding:0 2rem; height:56px;
+      display:flex; align-items:center; justify-content:space-between;
+      background:rgba(2,2,3,0.7); backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-logo { font-family:var(--mono); font-size:0.82rem; color:var(--text2); letter-spacing:0.04em; }
+    .nav-logo span { color:var(--accent); }
+    .nav-links { display:flex; gap:0.2rem; list-style:none; }
+    .nav-links a {
+      font-size:0.78rem; color:var(--text3); padding:0.35rem 0.75rem;
+      border-radius:6px; transition:all 0.2s; font-family:var(--mono);
+    }
+    .nav-links a:hover, .nav-links a.active { color:var(--text); background:var(--surface-h); }
+
+    /* Layout */
+    .page { position:relative; z-index:1; }
+    .container { max-width:860px; margin:0 auto; padding:0 2rem; }
+
+    /* Page header */
+    .page-header { padding-top:100px; padding-bottom:2.5rem; }
+    .eyebrow {
+      font-family:var(--mono); font-size:0.72rem; color:var(--accent);
+      letter-spacing:0.14em; text-transform:uppercase; margin-bottom:0.75rem;
+    }
+    .page-title {
+      font-size:clamp(2rem,5vw,3.5rem); font-weight:800;
+      letter-spacing:-0.03em; line-height:1; margin-bottom:0.75rem;
+    }
+    .page-desc { color:var(--text2); font-size:0.95rem; line-height:1.7; max-width:520px; }
 
     /* Blog grid */
-    .blog-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-
-    .blog-card{
-      background:var(--bg2);border:1px solid var(--border);border-radius:14px;
-      padding:1.6rem;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
-      display:flex;flex-direction:column;text-decoration:none;color:inherit;
-      position:relative;overflow:hidden;
+    .blog-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:0.75rem;
+      padding-bottom:6rem;
     }
-    .blog-card::before{
-      content:'';position:absolute;top:0;left:0;right:0;height:1px;
-      background:linear-gradient(90deg,var(--accent),transparent);
-      opacity:0;transition:opacity 0.3s;
+
+    .blog-card {
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:1.75rem;
+      display:flex; flex-direction:column;
+      transition:border-color 0.25s, background 0.25s, transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+      position:relative; overflow:hidden;
+      cursor:pointer;
     }
-    .blog-card:hover{
-      border-color:var(--border-light);transform:translateY(-3px);
-      box-shadow:0 10px 36px rgba(0,0,0,0.38);text-decoration:none;
+    .blog-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:1px;
+      background:linear-gradient(90deg, var(--accent), transparent 60%);
+      opacity:0; transition:opacity 0.3s;
     }
-    .blog-card:hover::before{opacity:1}
-
-    .blog-date{font-family:var(--mono);font-size:0.68rem;color:var(--text3);margin-bottom:0.55rem;letter-spacing:0.04em}
-    .blog-title{font-size:0.98rem;font-weight:600;margin-bottom:0.45rem;color:var(--text);line-height:1.45;letter-spacing:-0.2px}
-    .blog-excerpt{color:var(--text2);font-size:0.8rem;line-height:1.65;flex-grow:1;margin-bottom:0.9rem}
-    .blog-read{font-family:var(--mono);font-size:0.72rem;color:var(--accent)}
-    .blog-read:hover{color:var(--purple)}
-
-    .blog-placeholder{
-      border-style:dashed;border-color:var(--border-light);
-      display:flex;align-items:center;justify-content:center;min-height:180px;
+    .blog-card:hover {
+      border-color:var(--border-h);
+      background:var(--surface-h);
+      transform:translateY(-3px);
+      box-shadow:0 12px 40px rgba(0,0,0,0.4);
     }
-    .blog-placeholder p{color:var(--text3);font-size:0.82rem;font-family:var(--mono)}
+    .blog-card:hover::before { opacity:1; }
 
-    .footer{text-align:center;padding:2rem 0 4.5rem;font-size:0.68rem;color:var(--text3);font-family:var(--mono)}
+    .blog-meta {
+      display:flex; align-items:center; gap:0.5rem;
+      margin-bottom:0.75rem;
+    }
+    .blog-date {
+      font-family:var(--mono); font-size:0.68rem; color:var(--text3); letter-spacing:0.04em;
+    }
+    .blog-source {
+      font-family:var(--mono); font-size:0.62rem;
+      padding:0.1rem 0.4rem;
+      background:rgba(96,165,250,0.12);
+      border:1px solid rgba(96,165,250,0.2);
+      border-radius:4px; color:var(--blue);
+    }
 
-    @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-    .fade{animation:fadeIn 0.5s ease forwards}
-    .fade-d1{animation-delay:0.1s;opacity:0}
-    .fade-d2{animation-delay:0.2s;opacity:0}
+    .blog-title {
+      font-size:0.95rem; font-weight:600; letter-spacing:-0.01em;
+      line-height:1.45; color:var(--text); margin-bottom:0.6rem;
+      flex-grow:1;
+    }
 
-    @media(max-width:640px){.blog-grid{grid-template-columns:1fr}}
+    .blog-excerpt {
+      color:var(--text2); font-size:0.8rem; line-height:1.7;
+      margin-bottom:1rem; flex-grow:2;
+    }
+
+    .blog-read {
+      font-family:var(--mono); font-size:0.72rem; color:var(--accent);
+      margin-top:auto; transition:color 0.2s;
+    }
+    .blog-card:hover .blog-read { color:var(--purple); }
+
+    /* Placeholder */
+    .blog-placeholder {
+      border:1px dashed var(--border-h);
+      background:transparent;
+      display:flex; align-items:center; justify-content:center;
+      min-height:180px;
+    }
+    .blog-placeholder:hover { transform:none; box-shadow:none; border-color:var(--border-h); background:transparent; }
+    .blog-placeholder::before { display:none; }
+    .blog-placeholder p { color:var(--text3); font-size:0.8rem; font-family:var(--mono); }
+
+    /* Animations */
+    @keyframes slideUp {
+      from { opacity:0; transform:translateY(16px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .s0 { opacity:0; animation:slideUp 0.6s var(--ease) 0.05s forwards; }
+    .s1 { opacity:0; animation:slideUp 0.6s var(--ease) 0.15s forwards; }
+    .s2 { opacity:0; animation:slideUp 0.6s var(--ease) 0.25s forwards; }
+    .s3 { opacity:0; animation:slideUp 0.6s var(--ease) 0.35s forwards; }
+    .s4 { opacity:0; animation:slideUp 0.6s var(--ease) 0.45s forwards; }
+
+    /* Footer */
+    .footer {
+      text-align:center; padding:2rem 0 3rem;
+      font-family:var(--mono); font-size:0.68rem; color:var(--text3);
+      border-top:1px solid var(--border);
+    }
+
+    @media(max-width:600px) {
+      .blog-grid { grid-template-columns:1fr; }
+      .nav-links { display:none; }
+    }
   </style>
 </head>
 <body>
 
-<nav class="float-nav">
-  <a href="index.html">Home</a>
-  <a href="projects.html">Projects</a>
-  <a href="playground.html">Playground</a>
-  <a href="blog.html" class="active">Blog</a>
-  <a href="assets/Roshan_A_Rauof_Resume.pdf" target="_blank">Resume</a>
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">roshan<span>.dev</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="playground.html">Playground</a></li>
+    <li><a href="blog.html" class="active">Blog</a></li>
+    <li><a href="assets/Roshan_A_Rauof_Resume.pdf" target="_blank">Resume</a></li>
+  </ul>
 </nav>
 
-<div class="container">
-  <div class="page-header fade">
-    <div class="section-line"><span class="section-label">Blog</span></div>
-  </div>
-  <p class="page-desc fade fade-d1">Writing about ML concepts, project breakdowns, and lessons from building things.</p>
+<div class="page">
+  <div class="container">
 
-  <div class="blog-grid">
-    <a href="blog/insider-threat-detection.html" class="blog-card fade fade-d1">
-      <span class="blog-date">Mar 2026</span>
-      <h3 class="blog-title">How I Built a 9-Layer Insider Threat Detection Pipeline</h3>
-      <p class="blog-excerpt">Breaking down PIRS — from raw CERT r6.2 data to a Q-learning intervention engine processing 1.3M records.</p>
-      <span class="blog-read">Read more →</span>
-    </a>
+    <header class="page-header">
+      <p class="eyebrow s0">// writing</p>
+      <h1 class="page-title s1">Blog</h1>
+      <p class="page-desc s2">Writing about ML concepts, project breakdowns, and lessons from building things.</p>
+    </header>
 
-    <a href="https://medium.com/@rosh003/cracking-indias-electric-two-wheeler-market-a-data-driven-segmentation-strategy-3eb66a46fe8b" target="_blank" class="blog-card fade fade-d1">
-      <span class="blog-date">Oct 2025 · Medium</span>
-      <h3 class="blog-title">Cracking India's Electric Two-Wheeler Market: A Data-Driven Segmentation Strategy</h3>
-      <p class="blog-excerpt">Market segmentation and data analysis of India's booming EV two-wheeler space using clustering and consumer insights.</p>
-      <span class="blog-read">Read on Medium →</span>
-    </a>
+    <div class="blog-grid">
 
-    <a href="https://medium.com/@rosh003/freshstock-ai-revolutionizing-inventory-management-for-small-grocery-stores-a52eff64420a" target="_blank" class="blog-card fade fade-d2">
-      <span class="blog-date">Oct 2025 · Medium</span>
-      <h3 class="blog-title">FreshStock AI: Revolutionizing Inventory Management for Small Grocery Stores</h3>
-      <p class="blog-excerpt">How I built an ML-driven inventory optimization system achieving 87.3% forecast accuracy and 25–40% waste reduction.</p>
-      <span class="blog-read">Read on Medium →</span>
-    </a>
+      <a href="blog/insider-threat-detection.html" class="blog-card s3">
+        <div class="blog-meta">
+          <span class="blog-date">Mar 2026</span>
+        </div>
+        <h3 class="blog-title">How I Built a 9-Layer Insider Threat Detection Pipeline</h3>
+        <p class="blog-excerpt">Breaking down PIRS — from raw CERT r6.2 data to a Q-learning intervention engine processing 1.3M records.</p>
+        <span class="blog-read">Read more →</span>
+      </a>
 
-    <div class="blog-card blog-placeholder fade fade-d2">
-      <p>More posts coming soon...</p>
+      <a href="https://medium.com/@rosh003/cracking-indias-electric-two-wheeler-market-a-data-driven-segmentation-strategy-3eb66a46fe8b" target="_blank" class="blog-card s3">
+        <div class="blog-meta">
+          <span class="blog-date">Oct 2025</span>
+          <span class="blog-source">Medium</span>
+        </div>
+        <h3 class="blog-title">Cracking India's Electric Two-Wheeler Market: A Data-Driven Segmentation Strategy</h3>
+        <p class="blog-excerpt">Market segmentation and data analysis of India's booming EV two-wheeler space using clustering and consumer insights.</p>
+        <span class="blog-read">Read on Medium →</span>
+      </a>
+
+      <a href="https://medium.com/@rosh003/freshstock-ai-revolutionizing-inventory-management-for-small-grocery-stores-a52eff64420a" target="_blank" class="blog-card s4">
+        <div class="blog-meta">
+          <span class="blog-date">Oct 2025</span>
+          <span class="blog-source">Medium</span>
+        </div>
+        <h3 class="blog-title">FreshStock AI: Revolutionizing Inventory Management for Small Grocery Stores</h3>
+        <p class="blog-excerpt">How I built an ML-driven inventory optimization system achieving 87.3% forecast accuracy and 25–40% waste reduction.</p>
+        <span class="blog-read">Read on Medium →</span>
+      </a>
+
+      <div class="blog-card blog-placeholder s4">
+        <p>More posts coming soon...</p>
+      </div>
+
     </div>
-  </div>
 
-  <footer class="footer">Designed &amp; Built by Roshan A Rauof</footer>
+    <footer class="footer">Designed &amp; Built by Roshan A Rauof</footer>
+  </div>
 </div>
 
 </body>
